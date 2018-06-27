@@ -1,0 +1,17 @@
+# Document:
+# http://simiki.org/docs/configuration.html
+
+url: https://2kkkkk.github.io/wiki/
+title: zhanghongwei's personal knowledge wiki
+keywords: technology, machine learning, data mining
+description: A wiki website of zhanghongwei when I learned new knowledgy and technics.
+author: zhanghongwei
+
+root: /wiki/
+
+deploy:
+    - type: git
+      remote: origin
+      branch: gh-pages
+      
+theme: simple
