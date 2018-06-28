@@ -93,6 +93,7 @@ simiki官网给了一个方法：安装Fabric，并且在生成的_config.yml中
 
     git pull origin gh-pages:gh-pages 
 命令`git branch`可以查看本地分支
+命令 `git config --global http.postBuffer 1048576000` 可以设置缓冲区大小
 
 将写好的md文件放到`content`文件夹下，执行`simiki g`,编译成功后执行`fab delpoy`，即可将`output`文件夹中的html文件推送到`wiki`仓库的gh-pages分支，这时候就可以在`<yourUserName>.github.io/wiki`下看到你发布的内容了。
 **注意：此时只是将`output`文件夹中的html文件提交到`gh-pages`分支，还需要将原始md文件提交到`master`分支作为备份**
