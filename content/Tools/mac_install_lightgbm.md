@@ -1,5 +1,5 @@
 ﻿---
-title: "Mac os 安装lightgbm"
+title: "Mac os 安装 lightgbm"
 layout: page
 date: 2018-06-27 00:00
 ---
