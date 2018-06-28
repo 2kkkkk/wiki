@@ -77,7 +77,6 @@ simiki官网给了一个方法：安装Fabric，并且在生成的_config.yml中
 
 ## 网页发布流程
 
-### 提交html文件到`gh-pages`分支
 目前simiki仅支持markdown的格式，因此我们每次的文章都需要用markdown的形式来书写，同时还要注意每个markdown都需要添加类似于头文件的东西，如
 
     ---
@@ -85,6 +84,16 @@ simiki官网给了一个方法：安装Fabric，并且在生成的_config.yml中
     layout: page
     date: 2099-06-02 00:00
     ---
+### 提交html文件到`gh-pages`分支
+首先，将`master`分支克隆到本地
+
+    git clone  https://github.com/2kkkkk/wiki.git
+    cd wiki
+接着，将`gh-pages`分支pull到本地（这一步很重要，否则fab deploy会报错！！）
+
+    git pull origin gh-pages:gh-pages 
+命令`git branch`可以查看本地分支
+
 将写好的md文件放到`content`文件夹下，执行`simiki g`,编译成功后执行`fab delpoy`，即可将`output`文件夹中的html文件推送到`wiki`仓库的gh-pages分支，这时候就可以在`<yourUserName>.github.io/wiki`下看到你发布的内容了。
 **注意：此时只是将`output`文件夹中的html文件提交到`gh-pages`分支，还需要将原始md文件提交到`master`分支作为备份**
 
@@ -133,3 +142,5 @@ simiki官网给了一个方法：安装Fabric，并且在生成的_config.yml中
 
 [Gitment：使用 GitHub Issues 搭建评论系统](https://imsun.net/posts/gitment-introduction/)
 [Gitment评论功能接入踩坑教程](https://www.jianshu.com/p/57afa4844aaa)
+
+
