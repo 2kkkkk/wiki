@@ -52,8 +52,9 @@
 </ul>
 </li>
 <li><a href="#_4">网页发布流程</a><ul>
+<li><a href="#mdmaster">提交md文件到master分支</a></li>
 <li><a href="#htmlgh-pages">提交html文件到gh-pages分支</a></li>
-<li><a href="#mdmastermacgitgithub">提交md文件到master分支（即Mac下使用Git上传本地项目到github）</a></li>
+<li><a href="#macgitgithub">附：Mac下使用Git上传本地项目到github</a></li>
 </ul>
 </li>
 <li><a href="#gitment">Gitment 评论模块</a></li>
@@ -135,23 +136,31 @@ date: 2099-06-02 00:00
 </pre></div>
 
 
-<h3 id="htmlgh-pages">提交html文件到<code>gh-pages</code>分支</h3>
+<h3 id="mdmaster">提交md文件到<code>master</code>分支</h3>
 <p>首先，将<code>master</code>分支克隆到本地</p>
 <div class="hlcode"><pre><span></span>git clone  https://github.com/2kkkkk/wiki.git
 cd wiki
 </pre></div>
 
 
-<p>接着，将<code>gh-pages</code>分支pull到本地（这一步很重要，否则fab deploy会报错！！）</p>
+<p>命令<code>git branch</code>可以查看本地分支<br />
+命令 <code>git config --global http.postBuffer 1048576000</code> 可以设置缓冲区大小</p>
+<p>将写好的md文件放到<code>content</code>文件夹下，<code>git status</code>查看工作区状态，理论上会出现content新添加的文件，然后执行</p>
+<div class="hlcode"><pre><span></span>git add . 
+git commit -m &quot;update&quot;
+git push -u origin master
+</pre></div>
+
+
+<p>即可将md文件提交到<code>master</code>分支。</p>
+<h3 id="htmlgh-pages">提交html文件到<code>gh-pages</code>分支</h3>
+<p>将<code>gh-pages</code>分支pull到本地（这一步很重要，否则fab deploy会报错！！）</p>
 <div class="hlcode"><pre><span></span>git pull origin gh-pages:gh-pages
 </pre></div>
 
 
-<p>命令<code>git branch</code>可以查看本地分支<br />
-命令 <code>git config --global http.postBuffer 1048576000</code> 可以设置缓冲区大小</p>
-<p>将写好的md文件放到<code>content</code>文件夹下，执行<code>simiki g</code>,编译成功后执行<code>fab delpoy</code>，即可将<code>output</code>文件夹中的html文件推送到<code>wiki</code>仓库的gh-pages分支，这时候就可以在<code>&lt;yourUserName&gt;.github.io/wiki</code>下看到你发布的内容了。<br />
-<strong>注意：此时只是将<code>output</code>文件夹中的html文件提交到<code>gh-pages</code>分支，还需要将原始md文件提交到<code>master</code>分支作为备份</strong></p>
-<h3 id="mdmastermacgitgithub">提交md文件到<code>master</code>分支（即Mac下使用Git上传本地项目到github）</h3>
+<p>执行<code>simiki g</code>,编译成功后执行<code>fab delpoy</code>，即可将<code>output</code>文件夹中的html文件推送到<code>wiki</code>仓库的gh-pages分支，这时候就可以在<code>&lt;yourUserName&gt;.github.io/wiki</code>下看到你发布的内容了。</p>
+<h3 id="macgitgithub">附：Mac下使用Git上传本地项目到github</h3>
 <p>配置 ssh , 输入命令生成ssh key：<code>ssh-keygen -t rsa -C "你登录github的邮箱"</code> </p>
 <p>输入命令，将你的ssh代码复制到剪贴板：<code>pbcopy &lt; ~/.ssh/id_rsa.pub</code> </p>
 <p>回到Github上，点击头像进入设置，再进入<code>SSH and GPG keys</code>，点击 <code>New SSH key</code> </p>
