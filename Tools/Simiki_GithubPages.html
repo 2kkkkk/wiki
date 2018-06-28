@@ -147,7 +147,8 @@ cd wiki
 </pre></div>
 
 
-<p>命令<code>git branch</code>可以查看本地分支</p>
+<p>命令<code>git branch</code>可以查看本地分支<br />
+命令 <code>git config --global http.postBuffer 1048576000</code> 可以设置缓冲区大小</p>
 <p>将写好的md文件放到<code>content</code>文件夹下，执行<code>simiki g</code>,编译成功后执行<code>fab delpoy</code>，即可将<code>output</code>文件夹中的html文件推送到<code>wiki</code>仓库的gh-pages分支，这时候就可以在<code>&lt;yourUserName&gt;.github.io/wiki</code>下看到你发布的内容了。<br />
 <strong>注意：此时只是将<code>output</code>文件夹中的html文件提交到<code>gh-pages</code>分支，还需要将原始md文件提交到<code>master</code>分支作为备份</strong></p>
 <h3 id="mdmastermacgitgithub">提交md文件到<code>master</code>分支（即Mac下使用Git上传本地项目到github）</h3>
