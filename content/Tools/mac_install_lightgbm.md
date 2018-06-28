@@ -5,13 +5,15 @@ date: 2018-06-27 00:00
 ---
 
 [TOC]
+
+**stackverflow真是个好网站！！！！！！！！！**
+
 Mac 系统真的麻烦，在Windows上一个pip install lightgbm就可以了，但在Mac上不行，百度了下，原因是：
 
     LightGBM depends on OpenMP for compiling, which isn't supported by Apple Clang.
     
     Please install gcc/g++ by using the following commands
 
-**stackverflow真是个好网站！！！！！！！！！**
 
 ## 成功
 心想用英文搜一下问题，看看老外是怎么解决的，果然找出了stackoverflow上的[解决方案](https://stackoverflow.com/questions/44937698/lightgbm-oserror-library-not-loaded)，一看就觉得靠谱，试了之后果然成功了，老外真厉害！
