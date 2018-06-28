@@ -104,6 +104,34 @@ simiki官网给了一个方法：安装Fabric，并且在生成的_config.yml中
 
     git pull origin gh-pages:gh-pages 
 执行`simiki g`,编译成功后执行`fab delpoy`，即可将`output`文件夹中的html文件推送到`wiki`仓库的gh-pages分支，这时候就可以在`<yourUserName>.github.io/wiki`下看到你发布的内容了。
+**注意，这里有坑：有时候，`fab deploy` 会报如下错误：**
+
+    jackdeMacBook-Pro:wiki jack$ fab deploy
+    [localhost] local: which ghp-import > /dev/null 2>&1; echo $?
+    [localhost] local: ghp-import -p -m "Update output documentation" -r origin -b gh-pages output
+    To https://github.com/2kkkkk/wiki.git
+     ! [rejected]        gh-pages -> gh-pages (non-fast-forward)
+    error: failed to push some refs to 'https://github.com/2kkkkk/wiki.git'
+    hint: Updates were rejected because a pushed branch tip is behind its remote
+    hint: counterpart. Check out this branch and integrate the remote changes
+    hint: (e.g. 'git pull ...') before pushing again.
+    hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+    Traceback (most recent call last):
+      File "/Users/jack/anaconda3/bin/ghp-import", line 11, in <module>
+        load_entry_point('ghp-import==0.5.5', 'console_scripts', 'ghp-import')()
+      File "/Users/jack/anaconda3/lib/python3.6/site-packages/ghp_import-0.5.5-py3.6.egg/ghp_import.py", line 244, in main
+        git.check_call('push', opts.remote, opts.branch)
+      File "/Users/jack/anaconda3/lib/python3.6/site-packages/ghp_import-0.5.5-py3.6.egg/ghp_import.py", line 106, in check_call
+        sp.check_call(['git'] + list(args), **kwargs)
+      File "/Users/jack/anaconda3/lib/python3.6/subprocess.py", line 291, in check_call
+        raise CalledProcessError(retcode, cmd)
+    subprocess.CalledProcessError: Command '['git', 'push', 'origin', 'gh-pages']' returned non-zero exit status 1.
+    
+    Fatal error: local() encountered an error (return code 1) while executing 'ghp-import -p -m "Update output documentation" -r origin -b gh-pages output'
+    
+    Aborting.
+    
+**百度后原因应该是github上的版本和本地版本冲突，因此fab deploy 之前先执行`git pull origin gh-pages:gh-pages`即可**
 
 
 ### 附：Mac下使用Git上传本地项目到github
