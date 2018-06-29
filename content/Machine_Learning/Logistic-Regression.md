@@ -6,7 +6,7 @@ date: 2018-06-29 00:00
 
 [TOC]
 
-##Logistic Regression Problem
+## Logistic Regression Problem
 
 一个心脏病预测的问题：根据患者的年龄、血压、体重等信息，来预测患者是否会有心脏病。很明显这是一个二分类问题，其输出y只有{-1,1}两种情况。
 但是，如果我们想知道的不是患者有没有心脏病，而是到底患者有多大的几率是心脏病。这表示，我们更关心的是目标函数的值（分布在0,1之间），表示是正类的概率（正类表示是心脏病）。这跟我们原来讨论的二分类问题不太一样，我们把这个问题称为软性二分类问题（’soft’ binary classification）。这个值越接近1，表示正类的可能性越大；越接近0，表示负类的可能性越大。
@@ -20,21 +20,22 @@ date: 2018-06-29 00:00
 如果目标函数是$(f(x)=P(+1|x)∈[0,1])$的话，我们如何找到一个好的Hypothesis跟这个目标函数很接近呢？
 首先，根据我们之前的做法，对所有的特征值进行加权处理，计算的结果s，我们称之为 risk score：
 
-$$for\  \mathbf{x}=(x_{0},x_{1},x_{2},\cdots ,x_{d})$$
-
-$$s=\sum_{i=0}^{d}w_{i}x_{i}$$
-
+$$
+for\  \mathbf{x}=(x_{0},x_{1},x_{2},\cdots ,x_{d}) ,   s=\sum_{i=0}^{d}w_{i}x_{i}
+$$
 但是特征加权和s∈(−∞,+∞)，如何将s值限定在[0,1]之间呢？一个方法是使用sigmoid Function，记为θ(s)
 
 <img src="/wiki/static/images/logistic_regression/sigmoid.png" alt="sigmoid function"/>
 
 Sigmoid Function函数记为$(\theta (s)=\frac{1}{1+e^{-s}})$，满足$(\theta (-\infty)=0,\theta (0)=0.5,\theta (+\infty)=1)$。这个函数是平滑的、单调的S型函数。则对于逻辑回归问题，hypothesis就是这样的形式：
 
-$$h(\mathbf{x})=\frac{1}{1+e^{-\mathbf{w}^{T}\mathbf{x}}}$$
-
+$$
+h(\mathbf{x})=\frac{1}{1+e^{-\mathbf{w}^{T}\mathbf{x}}}
+$$
 那我们的目标就是求出这个预测函数h(x)，使它接近目标函数f(x)
 
-##Logistic Regression Error
+## Logistic Regression Error
+
 现在我们将Logistic Regression与之前讲的Linear Classification、Linear Regression做个比较：
 
 <img src="/wiki/static/images/logistic_regression/lr_compare.png" alt="lr_compare"/>
@@ -46,11 +47,14 @@ $$h(\mathbf{x})=\frac{1}{1+e^{-\mathbf{w}^{T}\mathbf{x}}}$$
 
 logistic function：$(h(\mathbf{x})=\theta (\mathbf{w}^{T}\mathbf{x}))$ 满足一个性质：1−h(x)=h(−x)， 因此似然函数可以写成：
 
-$$likelihood(h)=P(\mathbf{x}_{1})h(+\mathbf{x}_{1})\times P(\mathbf{x}_{2})h(-\mathbf{x}_{2})\times \cdots \times P(\mathbf{x}_{N})h(+\mathbf{x}_{N})$$
+$$
+likelihood(h)=P(\mathbf{x}_{1})h(+\mathbf{x}_{1})\times P(\mathbf{x}_{2})h(-\mathbf{x}_{2})\times \cdots \times P(\mathbf{x}_{N})h(+\mathbf{x}_{N})
+$$
+因为$(P(\mathbf{x}_{n}))$对所有的hypothesis来说，都是一样的，所以我们可以忽略它，那么可以得到$(likelihood(h))$正比于所有$(h(y_{n}\mathbf{x}_{n}))$的乘积，通常情况下target function $(f)$ 生成数据集D的probability很大，因此我们的目标就是让所有$(h(y_{n}\mathbf{x}_{n}))$的乘积值最大化。
+$$
+\max_{h}\ likelihood(logistic \ h)\propto \prod_{n=1}^{N} h(y_{n}\mathbf{x}_{n})
+$$
 
-因为$(P(\mathbf{x}_{n}))$
-对所有的hypothesis来说，都是一样的，所以我们可以忽略它，那么可以得到$(likelihood(h))$正比于所有$(h(y_{n}\mathbf{x}_{n}))$的乘积，通常情况下target function $(f)$ 生成数据集D的probability很大，因此我们的目标就是让所有$(h(y_{n}\mathbf{x}_{n}))$的乘积值最大化。
-$$\max_{h}\ likelihood(logistic \ h)\propto \prod_{n=1}^{N} h(y_{n}\mathbf{x}_{n})$$
 将$( h(\mathbf{x})=\theta (\mathbf{w}^{T}\mathbf{x}))$代入
 $$\max_{\mathbf{w}}\ likelihood(logistic \ h)\propto \prod_{n=1}^{N} \theta (y_{n}\mathbf{w^{T}}\mathbf{x}_{n})$$
 为了把连乘问题简化计算，我们可以引入ln操作，让连乘转化为连加
@@ -108,11 +112,11 @@ $$\mathbf{w}_{t+1}=\mathbf{w}_{t}+-{\eta}'\nabla E_{in}(\mathbf{w}_{t})$$
 $${\eta}'=\frac{-\eta }{\left \| \nabla E_{in}(\mathbf{w}_{t}) \right \|}$$
 总结一下基于梯度下降的Logistic Regression算法步骤如下：
 
- 1. 初始化w0 
- 2. 计算梯度$(\nabla E_{in}(\mathbf{w})=\frac{1}{N}\sum_{n=1}^{N}\theta (-y_{n}\mathbf{w^{T}}\mathbf{x}_{n})(-y_{n}\mathbf{x_{n}})
-)$
- 3. 迭代更新$(\mathbf{w}_{t+1}=\mathbf{w}_{t}+-{\eta}'\nabla E_{in}(\mathbf{w}_{t}))$
- 4. 满足$(\nabla E_{in}(\mathbf{w}_{t}))$≈0或者达到迭代次数，迭代结束
+    1. 初始化w0 
+    2. 计算梯度$(\nabla E_{in}(\mathbf{w})=\frac{1}{N}\sum_{n=1}^{N}\theta (-y_{n}\mathbf{w^{T}}\mathbf{x}_{n})(-y_{n}\mathbf{x_{n}})
+    )$
+    3. 迭代更新$(\mathbf{w}_{t+1}=\mathbf{w}_{t}+-{\eta}'\nabla E_{in}(\mathbf{w}_{t}))$
+    4. 满足$(\nabla E_{in}(\mathbf{w}_{t}))$≈0或者达到迭代次数，迭代结束
 
 ##总结
 首先，从逻辑回归的问题出发，将P(+1|x)作为目标函数，将θ(wTx)作为hypothesis。接着，根据极大似然准则定义了logistic regression的err function，称之为cross-entropy error。然后，我们计算logistic regression error的梯度，最后，通过梯度下降算法，计算最优$(\mathbf{w}_{t})$
@@ -124,5 +128,5 @@ A：机器学习基石视频里给出了思路：求出二次微分的矩阵，�
 
 ##参考
 
- 1. [红色石头的机器学习之路](https://redstonewill.github.io/2018/03/17/10/)
- 2. [机器学习基石课程](https://www.bilibili.com/video/av12463015/?p=41)
+    1. [红色石头的机器学习之路](https://redstonewill.github.io/2018/03/17/10/)
+    2. [机器学习基石课程](https://www.bilibili.com/video/av12463015/?p=41)
