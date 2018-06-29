@@ -180,4 +180,6 @@ simiki官网给了一个方法：安装Fabric，并且在生成的_config.yml中
 [Gitment：使用 GitHub Issues 搭建评论系统](https://imsun.net/posts/gitment-introduction/)
 [Gitment评论功能接入踩坑教程](https://www.jianshu.com/p/57afa4844aaa)
 
+##补充：
+`simiki g`命令需要用到content和theme两个文件夹的内容来生产output文件夹，因此图片应该放在themes/simple/static/images下
 
