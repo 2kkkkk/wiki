@@ -14,4 +14,4 @@ deploy:
       remote: origin
       branch: gh-pages
       
-theme: yasimple_x2
+theme: simple
