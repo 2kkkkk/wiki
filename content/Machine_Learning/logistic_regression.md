@@ -54,7 +54,8 @@ $$h(\mathbf{x})=\frac{1}{1+e^{-\mathbf{w}^{T}\mathbf{x}}}$$
 
 <img src="/wiki/static/images/logistic_regression/max_likelihood.png" alt="max_likelihood"/>
 
-logistic function: $ (h(\mathbf{x})=\theta (\mathbf{w}^{T}\mathbf{x}))$ 满足一个性质：1−h(x)=h(−x)， 因此似然函数可以写成：
+logistic function：
+$(h(\mathbf{x})=\theta (\mathbf{w}^{T}\mathbf{x}))$ 满足一个性质：1−h(x)=h(−x)， 因此似然函数可以写成：
 $$likelihood(h)=P(\mathbf{x}_{1})h(+\mathbf{x}_{1})\times P(\mathbf{x}_{2})h(-\mathbf{x}_{2})\times \cdots \times P(\mathbf{x}_{N})h(+\mathbf{x}_{N})$$
 因为$(P(\mathbf{x}_{n}))$
 对所有的hypothesis来说，都是一样的，所以我们可以忽略它，那么可以得到$(likelihood(h))$正比于所有$(h(y_{n}\mathbf{x}_{n}))$的乘积，通常情况下target function $(f)$ 生成数据集D的probability很大，因此我们的目标就是让所有$(h(y_{n}\mathbf{x}_{n}))$的乘积值最大化。
