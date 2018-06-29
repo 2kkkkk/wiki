@@ -88,8 +88,7 @@ $$h(\mathbf{x})=\frac{1}{1+e^{-\mathbf{w}^{T}\mathbf{x}}}$$</p>
 <p>这三个线性模型都会用到线性scoring function $( s=\mathbf{w}^{T}\mathbf{x})$。linear classification的误差使用的是0/1 error，linear regression的误差使用的是squared error，那么logistic regression的误差该如何定义呢？<br />
 先介绍一下“似然性”的概念。目标函数$(f(x)=P(+1|x))$，如果我们找到了hypothesis很接近target function， 也就是说，在所有的Hypothesis集合中找到一个hypothesis与target function最接近，那么由该hypothesis生成数据集D的似然值应该与由target function 生成数据集D的概率值很接近。</p>
 <p><img src="/wiki/static/images/logistic_regression/max_likelihood.png" alt="max_likelihood"/></p>
-<p>logistic function：<br />
-$(h(\mathbf{x})=\theta (\mathbf{w}^{T}\mathbf{x}))$ 满足一个性质：1−h(x)=h(−x)， 因此似然函数可以写成：<br />
+<p>logistic function：$(h(\mathbf{x})=\theta (\mathbf{w}^{T}\mathbf{x}))$ 满足一个性质：1−h(x)=h(−x)， 因此似然函数可以写成：<br />
 $$likelihood(h)=P(\mathbf{x}<em 1="1">{1})h(+\mathbf{x}</em>)\times P(\mathbf{x}<em 2="2">{2})h(-\mathbf{x}</em>)\times \cdots \times P(\mathbf{x}<em N="N">{N})h(+\mathbf{x}</em>)$$<br />
 因为$(P(\mathbf{x}<em n="n">{n}))$<br />
 对所有的hypothesis来说，都是一样的，所以我们可以忽略它，那么可以得到$(likelihood(h))$正比于所有$(h(y</em>\mathbf{x}<em n="n">{n}))$的乘积，通常情况下target function $(f)$ 生成数据集D的probability很大，因此我们的目标就是让所有$(h(y</em>\mathbf{x}<em h="h">{n}))$的乘积值最大化。<br />
