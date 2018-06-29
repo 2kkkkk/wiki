@@ -12,34 +12,24 @@ date: 2018-06-29 00:00
 但是，如果我们想知道的不是患者有没有心脏病，而是到底患者有多大的几率是心脏病。这表示，我们更关心的是目标函数的值（分布在0,1之间），表示是正类的概率（正类表示是心脏病）。这跟我们原来讨论的二分类问题不太一样，我们把这个问题称为软性二分类问题（’soft’ binary classification）。这个值越接近1，表示正类的可能性越大；越接近0，表示负类的可能性越大。
 目标函数target function: $$f(x)=P(+1|x)\in [0,1]$$
 对于软性二分类问题，理想的label为概率值，是分布在[0,1]之间的具体值，但是实际数据中label是0或者1，我们可以把实际中的数据看成是理想数据加上了噪声的影响。
-\begin{matrix}
- ideal(noiseless)data \\ 
- \left \{ (\mathbf{x}_{1},y_{1}=0.9=P(+1|\mathbf{x}_{1}) \right \}\\
- \left \{ (\mathbf{x}_{2},y_{2}=0.2=P(+1|\mathbf{x}_{2}) \right \}  \\
- .\\
-.\\
-.\\
-\left \{ (\mathbf{x}_{N},y_{N}=0.3=P(+1|\mathbf{x}_{N}) \right \}
-\end{matrix}
 
-\begin{matrix}
- actual(noisy)data \\ 
- \left \{ (\mathbf{x}_{1},y_{1}=1\sim P(y|\mathbf{x}_{1}) \right \}\\
- \left \{ (\mathbf{x}_{2},y_{2}=-1\sim P(y|\mathbf{x}_{2}) \right \}  \\
- .\\
-.\\
-.\\
-\left \{ (\mathbf{x}_{N},y_{N}=+1 \sim P(y|\mathbf{x}_{N}) \right \}
-\end{matrix}
+<img src="/wiki/static/images/logistic_regression/noise_data.png" alt="noise_data"/>
+
 和hard binary classfication相比，使用相同的数据集，但学到不同的target function。
 
 如果目标函数是$(f(x)=P(+1|x)∈[0,1])$的话，我们如何找到一个好的Hypothesis跟这个目标函数很接近呢？
 首先，根据我们之前的做法，对所有的特征值进行加权处理，计算的结果s，我们称之为 risk score：
-$$for\  \mathbf{x}=(x_{0},x_{1},x_{2},\cdots ,x_{d})\\s=\sum_{i=0}^{d}w_{i}x_{i}$$
+
+$$for\  \mathbf{x}=(x_{0},x_{1},x_{2},\cdots ,x_{d})$$
+
+$$s=\sum_{i=0}^{d}w_{i}x_{i}$$
+
 但是特征加权和s∈(−∞,+∞)，如何将s值限定在[0,1]之间呢？一个方法是使用sigmoid Function，记为θ(s)
+
 <img src="/wiki/static/images/logistic_regression/sigmoid.png" alt="sigmoid function"/>
 
 Sigmoid Function函数记为$(\theta (s)=\frac{1}{1+e^{-s}})$，满足$(\theta (-\infty)=0,\theta (0)=0.5,\theta (+\infty)=1)$。这个函数是平滑的、单调的S型函数。则对于逻辑回归问题，hypothesis就是这样的形式：
+
 $$h(\mathbf{x})=\frac{1}{1+e^{-\mathbf{w}^{T}\mathbf{x}}}$$
 
 那我们的目标就是求出这个预测函数h(x)，使它接近目标函数f(x)
@@ -55,7 +45,9 @@ $$h(\mathbf{x})=\frac{1}{1+e^{-\mathbf{w}^{T}\mathbf{x}}}$$
 <img src="/wiki/static/images/logistic_regression/max_likelihood.png" alt="max_likelihood"/>
 
 logistic function：$(h(\mathbf{x})=\theta (\mathbf{w}^{T}\mathbf{x}))$ 满足一个性质：1−h(x)=h(−x)， 因此似然函数可以写成：
+
 $$likelihood(h)=P(\mathbf{x}_{1})h(+\mathbf{x}_{1})\times P(\mathbf{x}_{2})h(-\mathbf{x}_{2})\times \cdots \times P(\mathbf{x}_{N})h(+\mathbf{x}_{N})$$
+
 因为$(P(\mathbf{x}_{n}))$
 对所有的hypothesis来说，都是一样的，所以我们可以忽略它，那么可以得到$(likelihood(h))$正比于所有$(h(y_{n}\mathbf{x}_{n}))$的乘积，通常情况下target function $(f)$ 生成数据集D的probability很大，因此我们的目标就是让所有$(h(y_{n}\mathbf{x}_{n}))$的乘积值最大化。
 $$\max_{h}\ likelihood(logistic \ h)\propto \prod_{n=1}^{N} h(y_{n}\mathbf{x}_{n})$$
