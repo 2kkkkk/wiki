@@ -5,13 +5,6 @@ date: 2018-06-29 00:00
 ---
 
 [TOC]
----
-title: "Mac os 安装lightgbm"
-layout: page
-date: 2018-06-27 00:00
----
-
-[TOC]
 
 ##Logistic Regression Problem
 
@@ -135,3 +128,8 @@ $
 Q：如何证明交叉熵损失函数$\frac{1}{N}\sum_{n=1}^{N}ln(1+e^{-y_{n}\mathbf{w^{T}}\mathbf{x}_{n}})$是关于$\mathbf{w}$的的凸函数？
 A：机器学习基石视频里给出了思路：求出二次微分的矩阵，该矩阵是正定的，则说明函数是convex的。
 **需要自己证明一下！！！**
+
+##参考
+
+ 1. [红色石头的机器学习之路](https://redstonewill.github.io/2018/03/17/10/)
+ 2. [机器学习基石课程](https://www.bilibili.com/video/av12463015/?p=41)
