@@ -8,18 +8,18 @@ date: 2018-06-27 00:00
 ## Simiki介绍
 [Simiki](http://simiki.org/) 是一个简单的个人Wiki框架。使用Markdown书写Wiki, 生成静态HTML页面。Wiki源文件按目录分类存放, 方便管理维护。
 
-###目录结构
+### 目录结构
+
 - `_config.yml`	站点配置文件. 
-- `fabfile.py`	扩展脚本, 提供一些方便的额外操作. 需要安装Fabric.
-- `content`	存储源文件(目前暂时只支持Markdown)的目录.源文件以子目录名分类存放.
+	 `fabfile.py`	扩展脚本, 提供一些方便的额外操作. 需要安装Fabric.
+	 `content`	存储源文件(目前暂时只支持Markdown)的目录.源文件以子目录名分类存放.
 如content/linux/bash.md表示bash.md这个源文件属于linux分类.
 注意: Simiki 暂时只支持二级目录分类
-- `output`	输出的静态文件(html)目录.
+	 `output`	输出的静态文件(html)目录.
 注意: 此目录的生成/更新过程中会存在删除的操作, 请不要将无关且重要的文件放在此目录下
-- `themes`	存储所有主题的目录. 一个主题一个子目录, 全部存放在此目录下.
+	 `themes`	存储所有主题的目录. 一个主题一个子目录, 全部存放在此目录下.
 `_config.yml`配置当前使用的主题
 使用simiki新建初始化(simiki init)之后会出现四个文件或文件夹，其中content下存储的是源文件(目前只支持markdown)，后面使用simiki g编译的时候会将content下的文件编译成静态文件目录，并存放到output中.
-
 
 ------
 ##  Mac下部署到Github Pages
@@ -100,7 +100,9 @@ simiki官网给了一个方法：安装Fabric，并且在生成的_config.yml中
     git push -u origin master
 即可将md文件提交到`master`分支。
 ### 提交html文件到`gh-pages`分支
-将`gh-pages`分支pull到本地（这一步很重要，否则fab deploy会报错！！）
+> 将`gh-pages`分支pull到本地（这一步很重要，否则fab deploy会报错！！）
+
+这一步其实也不需要，之前报错的原因可能是因为网络原因传输错误，导致远程仓库和本地仓库冲突导致，正常情况下不需要，直接执行`fab deploy` 即可
 
     git pull origin gh-pages:gh-pages 
 执行`simiki g`,编译成功后执行`fab delpoy`，即可将`output`文件夹中的html文件推送到`wiki`仓库的gh-pages分支，这时候就可以在`<yourUserName>.github.io/wiki`下看到你发布的内容了。
@@ -130,7 +132,7 @@ simiki官网给了一个方法：安装Fabric，并且在生成的_config.yml中
     Fatal error: local() encountered an error (return code 1) while executing 'ghp-import -p -m "Update output documentation" -r origin -b gh-pages output'
     
     Aborting.
-    
+
 **百度后原因应该是github上的版本和本地版本冲突，因此fab deploy 之前先执行`git pull origin gh-pages:gh-pages`即可**
 
 
