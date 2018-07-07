@@ -185,3 +185,14 @@ simiki官网给了一个方法：安装Fabric，并且在生成的_config.yml中
 ##补充：
 `simiki g`命令需要用到content和theme两个文件夹的内容来生产output文件夹，因此图片应该放在themes/simple/static/images下
 
+## 后续
+
+markdown文件采用Typora软件编写
+
+1. **提交md文件和相关图片到`master`分支**
+   - 将新写好的md文件放到`content`文件夹中，相关的图片放到`themes\simple\static\images`对应文件夹下
+   - `git status`命令查看仓库状态，`git add .`命令添加文件到暂存区，`git commit -m 'tijiao'`命令提交到本地仓库，`git push -u origin master `命令提交到远程`wiki`仓库`master`分支
+2. **提交html文件到`gh-pages`分支**
+   - 每次执行simiki g 都会重新生成所有的html文件，因此先将之前的所有html文件备份，然后用`simiki g`命令编译
+   - 由于直接编译生成的html公式显示有问题，因此用Typora直接导出新编写的md文件为html文件，合并入之前的备份下的含有html的对应文件夹中，然后替换掉`output`下的对应文件夹
+   - 执行`fab deploy`提交`output`文件夹到远程`wiki`仓库`gh-pages`分支
