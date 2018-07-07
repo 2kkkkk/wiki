@@ -59,6 +59,7 @@
 </li>
 <li><a href="#gitment">Gitment 评论模块</a></li>
 <li><a href="#_5">补充：</a></li>
+<li><a href="#_6">后续</a></li>
 </ul>
 </div>
 <h2 id="simiki">Simiki介绍</h2>
@@ -224,6 +225,17 @@ git config --global user.email &quot;your_email@youremail.com&quot;
 <a href="https://www.jianshu.com/p/57afa4844aaa">Gitment评论功能接入踩坑教程</a></p>
 <h2 id="_5">补充：</h2>
 <p><code>simiki g</code>命令需要用到content和theme两个文件夹的内容来生产output文件夹，因此图片应该放在themes/simple/static/images下</p>
+<h2 id="_6">后续</h2>
+<p>markdown文件采用Typora软件编写</p>
+<ol>
+<li><strong>提交md文件和相关图片到<code>master</code>分支</strong></li>
+<li>将新写好的md文件放到<code>content</code>文件夹中，相关的图片放到<code>themes\simple\static\images</code>对应文件夹下</li>
+<li><code>git status</code>命令查看仓库状态，<code>git add .</code>命令添加文件到暂存区，<code>git commit -m 'tijiao'</code>命令提交到本地仓库，<code>git push -u origin master</code>命令提交到远程<code>wiki</code>仓库<code>master</code>分支</li>
+<li><strong>提交html文件到<code>gh-pages</code>分支</strong></li>
+<li>每次执行simiki g 都会重新生成所有的html文件，因此先将之前的所有html文件备份，然后用<code>simiki g</code>命令编译</li>
+<li>由于直接编译生成的html公式显示有问题，因此用Typora直接导出新编写的md文件为html文件，合并入之前的备份下的含有html的对应文件夹中，然后替换掉<code>output</code>下的对应文件夹</li>
+<li>执行<code>fab deploy</code>提交<code>output</code>文件夹到远程<code>wiki</code>仓库<code>gh-pages</code>分支</li>
+</ol>
 </div>
 <div id="content-footer">created in <span class="create-date date"> 2018-06-27 00:00 </span></div>
 <div id="comments"></div>
