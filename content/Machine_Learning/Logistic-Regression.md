@@ -41,6 +41,7 @@ $$
 <img src="/wiki/static/images/logistic_regression/lr_compare.png" alt="lr_compare"/>
 
 这三个线性模型都会用到线性scoring function $s=\mathbf{w}^{T}\mathbf{x}$。linear classification的误差使用的是0/1 error，linear regression的误差使用的是squared error，那么logistic regression的误差该如何定义呢？
+
 先介绍一下“似然性”的概念。目标函数$f(x)=P(+1|x)$，如果我们找到了hypothesis很接近target function， 也就是说，在所有的Hypothesis集合中找到一个hypothesis与target function最接近，那么由该hypothesis生成数据集D的似然值应该与由target function 生成数据集D的概率值很接近。
 
 <img src="/wiki/static/images/logistic_regression/max_likelihood.png" alt="max_likelihood"/>
@@ -173,10 +174,16 @@ $$
 
 首先，从逻辑回归的问题出发，将$P(+1|x)$作为目标函数，将$\theta (\mathbf{w}^{T}\mathbf{x})$作为hypothesis。接着，根据极大似然准则定义了logistic regression的err function，称之为cross-entropy error。然后，我们计算logistic regression error的梯度，最后，通过梯度下降算法，计算最优$\mathbf{w}_{t}$
 
-## 问题
+## 思考
 Q：如何证明交叉熵损失函数$\frac{1}{N}\sum_{n=1}^{N}ln(1+e^{-y_{n}\mathbf{w^{T}}\mathbf{x}_{n}})$是关于$\mathbf{w}$的的凸函数？
 A：机器学习基石视频里给出了思路：求出二次微分的矩阵，该矩阵是正定的，则说明函数是convex的。
 **需要自己证明一下！！！**
+
+Q：为什么logistic regression的误差不用平方损失函数？
+
+A：它会导致损失函数是一个关于参数向量 的非凸函数，而用对数损失函数就没有这种问题。凸函数的性质为我们后面求解参数向量 提供了极大便利，非凸函数有很多局部最优解，不利于求解 的计算过程。
+
+Q：有些教材里交叉熵损失函数是这样的形式：L(ŷ ,y)=−(ylog ŷ +(1−y)log (1−ŷ ))  这是因为输出y的定义是{0,1}，而不是{-1,1} 因此可以写成这样的形式，而不能写成$h(y_{n}\mathbf{x}_{n})$的形式
 
 ## 参考
 
