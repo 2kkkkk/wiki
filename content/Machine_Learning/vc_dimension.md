@@ -62,7 +62,7 @@ $$
 
 举例来说，如果我们的算法要在平面上(二维空间)挑选一条直线方程作为g，用来划分一个点x1。假设空间H是所有的直线，它的size M是无限多的。但是实际上可以将这些直线分为两类，一类是把x1判断为正例的，另一类是把x1判断为负例的。如下图所示：
 
-<img src="/wiki/static/images/adaboost/1point2lines.png.png" alt="joey"/>
+<img src="/wiki/static/images/adaboost/1point2lines.png" alt="joey"/>
 
 那如果在平面上有两个数据点x1,x2，这样的话，假设空间H中的无数条直线可以分为4类。那依次类推，3个数据点情况下，H中最多有8类直线。4个数据点，H中最多有14类直线(注意：为什么不是16类直线)。
 
@@ -159,7 +159,7 @@ VC维反映了假设空间H 的强大程度(powerfulness)，VC 维越大，H也�
 
 模型越复杂，VC维大，$E_{out}(g)$可能距离$E_{in}(g)$越远。如下图所示，随着d_vc的上升，$E_{in}(g)$不断降低，而模型复杂度不断上升。
 
-<img src="/wiki/static/images/adaboost/vc_power2.png.png" alt="joey"/>
+<img src="/wiki/static/images/adaboost/vc_power2.png" alt="joey"/>
 
 模型较复杂时(d_vc 较大)，需要更多的训练数据。 理论上，数据规模N 约等于 10000\*d_vc（称为采样复杂性，sample complexity)。然而，实际经验是，只需要 N = 10\*d_vc。 造成理论值与实际值之差如此之大的最大原因是，VC Bound 过于宽松了，我们得到的是一个比实际大得多的上界。
 

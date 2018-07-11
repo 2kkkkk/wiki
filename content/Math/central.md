@@ -45,33 +45,3 @@ $\bar S_1,\bar S_2,\bar S_3,\bar S_4,\bar S_5,\bar S_6,\bar S_7,\bar S_8,\bar S_
  ## 参考
 
 https://www.zhihu.com/question/22913867 XXCC的回答
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<img src="/wiki/static/images/adaboost/joey.png" alt="joey"/>
-$$
-\begin{align*}
- f(x) &= (x+a)(x+b) \\
- &= x^2 + (a+b)x + ab
-\end{align*}
-$$
-
-$$
-\mathop{\arg\min}_{\theta} \ \ \| \mathrm{J} (\theta)\|
-$$
-
-\mathcal{Y}
