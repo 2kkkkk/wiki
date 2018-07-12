@@ -178,7 +178,7 @@ $$
 
 在这些新的点$({\boldsymbol z_n},y_n)$上做线性模型的学习，来确定linear blending的系数$α_t$
 
-最后返回$G(\boldsymbol x)=LinH(innerprod(\boldsymbol\alpha,\boldsymbol\phi(\boldsymbol x)))$，其中$\boldsymbol\phi(\boldsymbol x)=g_{1}{(\boldsymbol x)},g_{2}{(\boldsymbol x)},...,g_{T}{(\boldsymbol x)})$，**这里关于$g_{t}{(\boldsymbol x)}$和$g_{t}^-{(\boldsymbol x)}$的区别，我的理解是，假设$g_{t}^-$是从训练集$D_{trian}$中学到的，$g_{t}^-{(\boldsymbol x)}$指的是假设$g_{t}^-$在训练集$D_{trian}$上的预测，而$g_{t}{(\boldsymbol x)}$指的是假设$g_{t}^-$在整个数据集$D$上的预测
+最后返回$G(\boldsymbol x)=LinH(innerprod(\boldsymbol\alpha,\boldsymbol\phi(\boldsymbol x)))$，其中$\boldsymbol\phi(\boldsymbol x)=g_{1}{(\boldsymbol x)},g_{2}{(\boldsymbol x)},...,g_{T}{(\boldsymbol x)})$，**这里关于$g_{t}{(\boldsymbol x)}$和$g_{t}^-{(\boldsymbol x)}$的区别，我的理解是，假设$g_{t}^-$是从训练集$D_{trian}$中学到的，$g_{t}^-{(\boldsymbol x)}$指的是假设$g_{t}^-$在训练集$D_{trian}$上的预测，而$g_{t}{(\boldsymbol x)}$指的是假设$g_{t}^-$在整个数据集$D$上的预测**
 
 ------
 
