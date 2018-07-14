@@ -144,25 +144,3 @@ RF中，特征选择的核心思想是random test。random test的做法是对�
 [林轩田 机器学习技法](https://www.bilibili.com/video/av12469267/?p=38)
 
 
-
-
-
-
-
-
-
-
-
-<img src="/wiki/static/images/adaboost/joey.png" alt="joey"/>
-$$
-\begin{align*}
- f(x) &= (x+a)(x+b) \\
- &= x^2 + (a+b)x + ab
-\end{align*}
-$$
-
-$$
-\mathop{\arg\min}_{\theta} \ \ \| \mathrm{J} (\theta)\|
-$$
-
-\mathcal{Y}
