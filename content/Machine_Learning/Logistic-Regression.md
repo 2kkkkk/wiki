@@ -185,8 +185,176 @@ A：它会导致损失函数是一个关于参数向量 的非凸函数，而�
 
 Q：有些教材里交叉熵损失函数是这样的形式：L(ŷ ,y)=−(ylog ŷ +(1−y)log (1−ŷ ))  这是因为输出y的定义是{0,1}，而不是{-1,1} 因此可以写成这样的形式，而不能写成$h(y_{n}\mathbf{x}_{n})$的形式
 
+## 个人总结
+
+逻辑斯蒂回归用来处理二分类问题，大多数资料的推导过程中是设定类别$y^{i}\in  \left \{ 0,1 \right \}$的，也有的教材设定$y\in  \left \{ -1,1 \right \}$ 
+
+1. Logistic的假设函数为$h_{\theta}(\mathbf{x})=\frac{1}{1+e^{-\mathbf{\theta}^{T}\mathbf{x}}}$，函数输出是介于（0，1）之间的，也就表明了属于某一类别的**概率**。对于输入x分类结果为类别1和类别0的概率分别为： 
+
+$$
+P(y=1|x;\theta)=h_{\theta}(x)\\
+P(y=0|x;\theta)=1-h_{\theta}(x)\\
+$$
+
+2. 有了假设函数后，通过极大似然估计的方法得到损失函数：
+
+   假设各个样本独立，真实的目标函数$f$(即类别1的概率函数)生成数据集$D$的概率值为：
+   $$
+   probability(f)=P(\mathbf{x}_{1})f(\mathbf{x}_{1})\times P(\mathbf{x}_{2})(1-f(\mathbf{x}_{2}))\times \cdots \times P(\mathbf{x}_{N})f(\mathbf{x}_{N})\\
+   上式中y_1=1,y_2=0,y_N=1...
+   $$
+   假设函数$h_{\theta}(\mathbf{x})$生成数据集D的似然值为：
+   $$
+   likelihood(h)=P(\mathbf{x}_{1})h(\mathbf{x}_{1})\times P(\mathbf{x}_{2})(1-h(\mathbf{x}_{2}))\times \cdots \times P(\mathbf{x}_{N})h(\mathbf{x}_{N})
+   $$
+   如果假设函数与真实目标函数十分接近的话，那么似然值与目标函数产生数据集$D$的概率值也应该十分接近，
+
+   通常情况下target function $f$ 生成数据集$D$的probability很大，因此我们的目标就是让似然值likelihood(h)最大。
+
+   因为$P(\mathbf{x}_{n})$对所有的hypothesis来说，都是一样的，所以我们可以忽略它，那么可以得到$likelihood(h)$正比于所有$h(\mathbf{x}_{n})(y_n=1)$和$1-h(\mathbf{x}_{n})(y_n=0)$的乘积，可以将yn=0和y_n=1这两种情况写到同一个表达式中，整理后似然值可以写成：
+   $$
+   L(\theta)=\prod_{i=1}^{n}(h_{\theta}(x^{(i)})^{y^{(i)}}*(1-h_{\theta}(x^{(i)}))^{1-y^{(i)}}
+   $$
+   其中，$x^{(i)}$表示第i个样本。为了把连乘问题简化计算，取对数似然函数，将连乘转化为连加；取负号，将maximize问题转化为minimize问题；并引入平均数操作1/N：
+   $$
+   J(\theta)=-\frac{1}{N}log(L(\theta))=-\frac{1}{N}\sum_{i=1}^{N}[y^{(i)}logh_{\theta}(x^{(i)})+(1-y^{(i)})log(1-h_{\theta}(x^{(i)}))]
+   $$
+   上式也被称为交叉熵损失函数
+
+3. 如何选取参数$\boldsymbol{\theta}$使损失函数最小呢，由于损失函数$J(\boldsymbol{\theta})$的Hessian矩阵是正定的，因此$J(\boldsymbol{\theta})$是关于$\boldsymbol{\theta}$的凸函数，为了计算$J(\boldsymbol{\theta})$的最小值时的$\boldsymbol{\theta}$，只需计算$J(\boldsymbol{\theta})$的梯度为0时的$\boldsymbol{\theta}$，即为最优解，下面求$J(\boldsymbol{\theta})$的梯度$\nabla J(\mathbf{\boldsymbol\theta})$
+   $$
+   \nabla J(\mathbf{\boldsymbol\theta})=(\frac{\partial J(\boldsymbol{\theta}) }{\partial \theta_1},\frac{\partial J(\boldsymbol{\theta}) }{\partial \theta_2},...,\frac{\partial J(\boldsymbol{\theta}) }{\partial \theta_m})
+   $$
+
+   $$
+   \frac{\partial J(\boldsymbol{\theta}) }{\partial \theta_j}=\frac{\partial }{\partial \theta_j}[-\frac{1}{N}\sum_{i=1}^{N}[y^{(i)}logh_{\theta}(x^{(i)})+(1-y^{(i)})log(1-h_{\theta}(x^{(i)}))]]
+   $$
+
+   根据链式求导法则，仔细推导可以得到
+   $$
+   \frac{\partial J(\boldsymbol{\theta}) }{\partial \theta_j}=\frac{1}{N}\sum_{i=1}^{N}(h_{\theta}(x^{(i)})-y^{(i)})x_j^{(i)}
+   $$
+   要让$\frac{\partial J(\boldsymbol{\theta}) }{\partial \theta_j}=0$，这种情况没有closed-form解，与Linear Regression不同，只能用迭代方法求解。
+
+4. 已知$J(\boldsymbol{\theta})$是凸函数，可以把$J(\boldsymbol{\theta})$看做一个山谷，求$J(\boldsymbol{\theta})$最小的过程可以看做下山的过程，那么根据泰勒Taylor一阶展开，可以得到：
+   $$
+   J(\boldsymbol{\theta_{t+1}})=J(\boldsymbol{\theta_{t}}+\eta\boldsymbol{\nu } )=J(\boldsymbol{\theta_{t}})+\eta\boldsymbol{\nu }^{T}
+   \nabla J(\boldsymbol{\theta_{t}})
+   $$
+   迭代的目的是让$J(\boldsymbol{\theta_{t+1}})$越来越小，即让$J(\boldsymbol{\theta_{t+1}})< J(\boldsymbol{\theta_{t}})$。η是标量，因为如果两个向量方向相反的话，那么他们的内积最小（为负），也就是说如果方向v与梯度$\nabla J(\boldsymbol{\theta_{t}})$反向的话，那么就能保证每次迭代$J(\boldsymbol{\theta_{t+1}})< J(\boldsymbol{\theta_{t}})$都成立。则我们令下降方向v为：
+   $$
+   \boldsymbol{\nu} =-\frac{\nabla J(\boldsymbol{\theta_{t}})}{\left \| \nabla J(\boldsymbol{\theta_{t}})\right \|}
+   $$
+   v是单位向量，v每次都是沿着梯度的反方向走，这种方法称为梯度下降（gradient descent）算法
+
+   即
+   $$
+   \theta_{j}^{t+1}：=\theta_{j}^{t}-\alpha\frac{1}{N}\sum_{i=1}^{N}(h_{\theta}(x^{(i)})-y^{(i)})x_j^{(i)}
+   $$
+   当达到迭代次数或损失函数很小时，迭代结束，此时的$\boldsymbol{\theta}$即为最优$\boldsymbol{\theta}$
+
+## 关于凸函数的Hessian矩阵正定
+
+### 1阶条件
+
+以一元函数为例，凸函数判定的一阶条件是：
+
+对于定义域内任意两个自变量x1和x2，若函数f满足
+$$
+f(x_2)\geq f(x_1)+f'(x_1)(x_2-x_1)
+$$
+则函数f为凸函数
+
+<img src="/wiki/static/images/logistic_regression/tu.png" alt="max_likelihood"/>
+
+如上图所示，直观的理解就是函数曲线始终位于任意一点的切线的上方。
+
+推广到多元函数写为
+$$
+f(\bold{x}_2)\geq f(\bold{x}_1)+\nabla f(\bold{x}_1)(\bold{x}_2-\bold{x}_1)
+$$
+其中梯度向量为
+$$
+\nabla f(\mathbf{\bold x})=\left (\frac{\partial f(\mathbf{\bold x})  }{\partial x_1},\frac{\partial f(\mathbf{\bold x})  }{\partial x_2},...,\frac{\partial f(\mathbf{\bold x})  }{\partial x_n}\right)
+$$
+也就是对各个变量求偏导构成的向量。
+
+### 2阶条件
+
+直接对多元函数$f(\mathbf{\bold x})$在$\bold x_0$处泰勒展开，
+$$
+f(\bold{x})= f(\bold{x}_0)+\nabla f(\bold{x}_0)(\bold{x}-\bold{x}_0)+\frac{1}{2}(\bold{x}-\bold{x}_0)^{T}\bold H(\bold{x}_0)(\bold{x}-\bold{x}_0)
+$$
+$\bold H(\bold{x}_0)$即$f(\mathbf{\bold x})$在$\bold x_0$点的Hessian矩阵，也可以写成$\nabla^2 f(\bold{x}_0)$，$\bold H_{ij}= \frac{\partial^2f(\mathbf{\bold x}) }{\partial x_i \partial x_j}$，写成矩阵形式就是
+$$
+\begin{bmatrix}
+\frac{\partial^2f(\mathbf{\bold x}) }{\partial x_1^2} & \frac{\partial^2f(\mathbf{\bold x}) }{\partial x_1 \partial x_2}  &\cdots   &  \frac{\partial^2f(\mathbf{\bold x}) }{\partial x_1 \partial x_n}\\ 
+ \frac{\partial^2f(\mathbf{\bold x}) }{\partial x_2 \partial x_1} & \frac{\partial^2f(\mathbf{\bold x}) }{\partial x_2^2} & \cdots  & \frac{\partial^2f(\mathbf{\bold x}) }{\partial x_2 \partial x_n} \\ 
+\vdots  & \vdots  &\ddots  &\vdots  \\ 
+  \frac{\partial^2f(\mathbf{\bold x}) }{\partial x_n \partial x_1}& \frac{\partial^2f(\mathbf{\bold x}) }{\partial x_n \partial x_2}  &  \cdots & \frac{\partial^2f(\mathbf{\bold x}) }{\partial x_n^2}
+\end{bmatrix}
+$$
+可以看出，该矩阵是实对称矩阵。
+
+对于一个凸函数，1st-order condition为$f(\bold{x})\geq f(\bold{x}_0)+\nabla f(\bold{x}_0)(\bold{x}-\bold{x}_0)$对任意的$\bold{x}$和$\bold{x}_0$都成立，因此式（33）中的$\frac{1}{2}(\bold{x}-\bold{x}_0)^{T}\bold H(\bold{x}_0)(\bold{x}-\bold{x}_0)\geq0$也要对任意的$\bold{x}$和$\bold{x}_0$都成立，即$\triangle \bold{x}^T\bold H(\bold{x}_0)\triangle \bold{x}\geq 0 $对任意$\triangle \bold{x}$恒成立，而这就是$\bold H$半正定的充要条件。
+
+那么，要证明交叉熵损失函数的Hessian矩阵半正定，只需要写出它的Hessian矩阵，然后用判定正定矩阵的方法进行判定即可，
+$$
+\frac{\partial J^2(\boldsymbol{\theta}) }{\partial \theta_j \partial \theta_k}=\frac{1}{N}\sum_{i=1}^{N}(h^2_{\theta}(x^{(i)})\cdot e^{-\theta^Tx^{(i)}}\cdot x_k^{(i)})x_j^{(i)}
+$$
+
+## softmax 回归
+
+Softmax回归模型是logistic回归模型在多分类问题上的推广，对于多分类问题，$y^{i}\in  \left \{1,2,3,...,k\right \}$，对于给定的测试输入x，我们想用假设函数针对每一个类别$j$估算出概率值$P(y=j|x)$，因此，我们的假设函数将要输出一个 k维的向量（向量元素的和为1）来表示这k个估计的概率值。 具体地说，我们的假设函数$h_{\theta}({x})$形式如下：
+$$
+h_{\theta}(x^{(i)})=\begin{bmatrix}
+P(y^{(i)}=1|x^{(i)};\theta)\\ 
+P(y^{(i)}=2|x^{(i)};\theta)\\ 
+\vdots \\ 
+P(y^{(i)}=k|x^{(i)};\theta)
+\end{bmatrix}
+=\frac{1}{\sum_{j=1}^{k}e^{\boldsymbol{\theta}{{}}_j^Tx^{(i)}}}\begin{bmatrix}
+e^{\boldsymbol{\theta}_1^Tx^{(i)}}\\ 
+e^{\boldsymbol{\theta}_2^Tx^{(i)}}\\ 
+\vdots \\ 
+e^{\boldsymbol{\theta}_k^Tx^{(i)}}
+\end{bmatrix}
+$$
+其中，$\sum_{j=1}^{k}e^{\boldsymbol{\theta}{{}}_j^Tx^{(i)}}$这一项是对概率分布做归一化，使得所有类别概率之和为 1 。
+
+用符号$\boldsymbol \theta$来表示所有的模型参数，将$\boldsymbol \theta$用一个$k \times (n+1)$矩阵来表示，n为特征维度数，该矩阵是将$\bold{\theta}_1,\bold{\theta}_2,...,\bold{\theta}_k$按行罗列起来的，如下所示
+$$
+\boldsymbol \theta=\begin{bmatrix}
+\bold{\theta}_1^T\\ 
+\bold{\theta}_2^T\\ 
+\vdots \\ 
+\bold{\theta}_k^T
+\end{bmatrix}
+$$
+ softmax 回归算法的代价函数也是logistic回归代价函数的推广，logistic回归代价函数可以改为
+$$
+\begin{align*}
+J(\theta)&=-\frac{1}{N}\left [\sum_{i=1}^{N}y^{(i)}logh_{\theta}(x^{(i)})+(1-y^{(i)})log(1-h_{\theta}(x^{(i)}))\right]\\
+&=-\frac{1}{N}\left [\sum_{i=1}^{N}\sum_{j=0}^{1}1\left \{y^{(i)}=j  \right \}logp(y^{(i)}=j|x^{(i)};\theta)\right]
+\end{align*}
+$$
+其中，1{表达式值为真}=1，为示性函数，将logistic回归代价函数推广到softmax的代价函数
+$$
+\begin{align*}
+J(\theta)
+&=-\frac{1}{N}\left [\sum_{i=1}^{N}\sum_{j=0}^{k}1\left \{y^{(i)}=j  \right \}log\frac{e^{\boldsymbol{\theta}{{}}_j^Tx^{(i)}}}{\sum_{l=1}^{k}e^{\boldsymbol{\theta}{{}}_l^Tx^{(i)}}}\right]
+\end{align*}
+$$
+Softmax代价函数与logistic 代价函数在形式上非常类似，只是在Softmax损失函数中对类标记的 $k$个可能值进行了累加。注意在Softmax回归中将 $x$分类为类别 $j$的概率为：
+$$
+p(y^{(i)}=j|x^{(i)};\theta)=\frac{e^{\boldsymbol{\theta}{{}}_j^Tx^{(i)}}}{\sum_{l=1}^{k}e^{\boldsymbol{\theta}{{}}_l^Tx^{(i)}}}
+$$
+对于$J(\theta)$最小化的问题，同样可以用梯度下降法求解。
+
 ## 参考
 
 1. [红色石头的机器学习之路](https://redstonewill.github.io/2018/03/17/10/)
 2. [机器学习基石课程](https://www.bilibili.com/video/av12463015/?p=41)
+3. [softmax](http://deeplearning.stanford.edu/wiki/index.php/Softmax%E5%9B%9E%E5%BD%92)
+4. [怎样理解凸函数与Hessian矩阵半正定](https://www.zhihu.com/question/40181086)
 
