@@ -219,16 +219,144 @@ Aggregation的核心是将所有的$g_t$结合起来，融合到一起，即集�
 
 主要介绍了Gradient Boosted Decision Tree。首先讲如何将AdaBoost与Decision Tree结合起来，即通过sampling和pruning的方法得到AdaBoost-D Tree模型。然后，我们从optimization的角度来看AdaBoost，找到好的hypothesis也就是找到一个好的方向，找到权重αα也就是找到合适的步进长度。接着，我们从binary classification的0/1 error推广到其它的error function，从Gradient Boosting角度推导了regression的squared error形式。Gradient Boosting其实就是不断迭代，做residual fitting。并将其与Decision Tree算法结合，得到了经典的GBDT算法。最后，我们将所有的aggregation models做了总结和概括，这些模型有的能防止欠拟合有的能防止过拟合，应用十分广泛。
 
-## 参考
-
-[红色石头机器学习之路](https://blog.csdn.net/red_stone1/article/details/76219948)
-
-林轩田 机器学习技法
-
 ## 思考
 
 $$
 \mathop{\min}_{\eta}\mathop{\min}_{h}\hat{E}_{ADA}=\frac{1}{N}\sum_{n=1}^{N}exp\left( -y_n\left( \sum_{\tau=1}^{t-1}\alpha_{\tau}g_{\tau}(\bold{x}_n)+\eta h(\bold{x}_n)\right) \right )
 $$
 
-为什么可以对上面这个式子做梯度下降??这个函数是关于h(x)的凸函数吗？如何证明？
+Q:为什么可以对上面这个式子做梯度下降??这个函数是关于h(x)的凸函数吗？如何证明？
+
+A:前向分步算法+泰勒一阶展开 决定的。跟凸函数无关
+
+## 个人总结
+
+Adaboost+decision就是统计学习方法第147页说的提升树
+
+**说白了，adaboost、提升树、gbdt 就是加法模型+前向分步算法**
+
+**adaboost用于处理二分类问题，损失函数为指数损失函数，且有样本权重的概念，基模型的权重是根据加权误分类率决定的**
+
+**gbdt不仅可用于分类，还可用于回归，损失函数可以为平方损失或其他一般的损失函数，基模型的权重是通过解一个一维最优化问题得到的**
+
+**其实adaboost的样本权重和gbdt的上一步模型的残差本质上是一个东西**
+
+### 加法模型+前向分步算法
+
+加法模型为
+$$
+G(x)=\sum_{t=1}^{T}\alpha_tg_t(x;\theta_t)
+$$
+其中，$g_t(x;\theta_t)$为基函数，$\theta_t$为基函数的参数，$\alpha_t$为基函数的系数。
+
+在给定训练数据和损失函数$L(y,G(x))$的条件下，学习加法模型成为经验风险最小化即损失函数最小化问题：
+$$
+\mathop{\min}_{\alpha_t,\theta_t}\sum_{i=1}^{N}L\left (y_i,\sum_{t=1}^{T}\alpha_tg_t(x_i;\theta_t)  \right)
+$$
+通常这是一个复杂的优化问题，前向分步算法求解这一优化问题的想法是：因为学习的是加法模型，如果能从前向后，每一步只学习一个基函数及其系数，逐步逼近优化目标函数式(19)，那么就可以简化优化的复杂度，具体的，每一步只需极小化如下损失函数就可以得到每一步的$\alpha_t$和$\theta_t$：
+$$
+(\alpha_t,\theta_t)=\mathop{\arg \min}_{\alpha,\theta}\sum_{i=1}^{N}L\left (y_i,G_{t-1}(x_i)+\alpha g(x_i;\theta)  \right)
+$$
+这样，前向分步算法将同时求解从t=1到T所有参数$\alpha_t,\theta_t$的优化问题转化为逐次求解各个$\alpha_t,\theta_t$的优化问题。
+
+adaboost算法就是由前向分步算法推导出来的
+
+### 提升树
+
+boosting（提升方法）实际就是加法模型（即基函数的线性组合）与前向分步算法。
+
+以决策树为基函数的提升方法成为提升树，对分类问题决策树是二叉分类树，对回归问题决策树是二叉回归树。
+
+提升树模型可以表示为决策树的加法模型：
+$$
+f_M(x)=\sum_{m=1}^{M}T(x;\Theta_m)
+$$
+其中，$T(x;\Theta_m)$表示决策树，$\Theta_m$为决策树的参数，M为树的个数，**注意这里每棵树前面没有系数$\alpha_t$，这是因为系数可以包含在决策树的输出中**
+
+针对不同问题的提升树学习算法，其主要区别在于使用的损失函数不同，包括用平方误差损失函数的回归问题，用指数损失函数的分类问题，用**一般损失函数**的一般决策问题。
+
+1. 对于二分类问题，且损失函数为指数损失函数的时候，提升树算法即基分类器为二分类树的adaboost算法。
+2. 对于回归问题，每棵树可以表示成：
+
+$$
+T(x;\Theta_m)=\sum_{j=1}^{J}c_jI(x\in R_j)
+$$
+
+​	在前向分步算法的第m步，给定当前模型$f_{m-1}(x)$，需求解
+$$
+\hat{\Theta}_m=\mathop{\arg \min}_{\Theta}\sum_{i=1}^{N}L\left (y_i,f_{m-1}(x_i)+T(x_i;\Theta)\right)
+$$
+​	得到$\hat{\Theta}_m​$，即第m棵树的参数。
+
+​	当采用平方误差损失函数时，
+
+​	
+$$
+L(y,f(x))=(y-f(x))^2
+$$
+​	第m步的损失为
+$$
+\begin{align*}
+L\left (y,f_{m-1}(x)+T(x;\Theta_m)\right)&=\left [y-f_{m-1}(x)-T(x;\Theta_m)\right]^2\\
+&=[r-T(x;\Theta_m)]^2
+\end{align*}
+$$
+​	这里，
+$$
+r=y-f_{m-1}(x)
+$$
+​	是当前模型拟合数据的残差，所以，对平方损失回归问题的提升树算法来说，只需简单地拟合当前模型的残   差，就可以得到第m棵树的最优参数$\Theta_m$。
+
+3. **那么问题来了，对于平方损失回归问题的提升树算法来说，只需简单地拟合当前模型的残差，就可以让损失函数最小，从而得到第m棵树的最优参数$\Theta_m$；但是对于一般的损失函数，我们有时候不知道通过拟合什么来让损失函数最小，得到让损失函数最小的最优参数$\Theta_m$，这时候该怎么办呢？**
+
+### 梯度提升树
+
+> 但是对于一般的损失函数，我们有时候不知道通过拟合什么来让损失函数最小，得到让损失函数最小的最优参数$\Theta_m$，这时候该怎么办呢？
+
+这句话怎么理解呢？可以回忆一下在逻辑斯蒂回归中交叉熵损失函数最小时的参数$\mathbf{w}$，也就是$\nabla E_{in}(\mathbf{w})=0$时的参数$\mathbf{w}$，但是这个方程没有闭式解，即我们不知道最优的$\mathbf{w}$长什么样子来让损失函数最小。现在说清楚了吧。
+
+#### "一下子优化"和“逐步优化”
+
+问题又来了，既然很难一下子得到最优的$g_t$，该怎么做呢?
+
+一个很自然的想法是，既然这个问题可以类比逻辑斯蒂回归中的损失函数最优化问题，那么我们看看在lr中是怎么解决这个问题不就行了吗？是的，没错！
+
+逻辑斯蒂回归中解决这个问题的方法是梯度下降法，由于损失函数是凸函数，只要保证第t+1轮的损失比第t轮的小$E_{in}(\mathbf{w}_{t+1})<E_{in}(\mathbf{w}_{t})$，那么经过一定次数T的迭代后，就可以保证$E_{in}(\mathbf{w}_{T})$达到最小。
+
+推广到这个问题，我们只要保证第t轮加入的基函数$g_t(x)$加入到当前模型$G_{t-1}(x)$后的损失比当前模型$G_{t-1}(x)$的损失小，那么经过一定次数T的迭代后，就可以保证最后的模型$$G_{T}(x)$$的损失很小。
+
+怎样保证$Loss(G_{t-1}(x)+\alpha_tg_t(x))<Loss(G_{t-1}(x))$呢？泰勒展开！！
+
+观察下Loss的表达式
+$$
+\sum_{i=1}^{N}L(y_i,G_{t-1}(x_i)+\alpha_tg_t(x_i))
+$$
+对这个函数在$G(x)=G_{t-1}(x)$处泰勒一阶展开，
+$$
+\sum_{i=1}^{N}L(y_i,G_{t-1}(x_i)+\alpha_tg_t(x_i))=\sum_{i=1}^{N}L(y_i,G_{t-1}(x_i))+\alpha_tg_t(x_i)\left [ \frac{\partial L(y_i,G(x_i))}{\partial G(x_i) }\right ]_{G(x)=G_{t-1}(x)}
+$$
+由于$\alpha_t$是大于0的，若
+$$
+g_t(x_i)=-\left [ \frac{\partial L(y_i,G(x_i))}{\partial G(x_i) }\right ]_{G(x)=G_{t-1}(x)}
+$$
+则
+$$
+\sum_{i=1}^{N}L(y_i,G_{t-1}(x_i)+\alpha_tg_t(x_i))\leq\sum_{i=1}^{N}L(y_i,G_{t-1}(x_i))
+$$
+式(28)就告诉了我们如何得到$g_t(x)$，这是一个回归问题。
+
+有了$g_t(x)$后，很容易得到$\alpha_t$，这是一个一维搜索问题。
+
+**思考下lr中的梯度下降和gbdt的梯度提升，下降的是损失，提升的是表现，本质都是逐步降低损失值。因此梯度提升树叫做梯度下降树也无妨~~**
+
+## 参考
+
+[红色石头机器学习之路](https://blog.csdn.net/red_stone1/article/details/76219948)
+
+[数据挖掘面试题之梯度提升树](https://www.jianshu.com/p/0e5ccc88d2cb)
+
+[gbdt源码](https://blog.csdn.net/lszdh/article/details/33305257)
+
+李航 统计学习方法
+
+林轩田 机器学习技法

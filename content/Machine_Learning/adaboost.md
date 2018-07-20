@@ -165,8 +165,105 @@ $$
 
 ​	本节课主要介绍了Adaptive Boosting。首先通过讲一个老师教小学生识别苹果的例子，来引入Boosting的思想，即把许多“弱弱”的hypotheses合并起来，变成很强的预测模型。然后重点介绍这种算法如何实现，关键在于每次迭代时，给予样本不同的系数$u_{n}^{t}$，宗旨是放大错误样本，缩小正确样本，得到不同的小g。并且在每次迭代时根据错误$\epsilon$值的大小，给予不同$g_{t}$不同的权重。最终由不同的$g_{t}$进行组合得到整体的预测模型G。实际证明，Adaptive Boosting能够得到有效的预测模型。
 
+## 个人总结
+
+### 原理理解
+
+1. AdaBoost是利用前一轮迭代的误差率来更新训练集的权重，减小上一轮被正确分类的样本权值，提高那些被错误分类的样本权值。然后，再根据所采用的一些基本机器学习算法进行学习，比如逻辑回归。
+2. AdaBoost采用加权多数表决的方法，加大分类误差率小的弱分类器的权重，减小分类误差率大的弱分类器的权重。即正确率高分得好的弱分类器在强分类器中有较大的发言权。
+
+### 算法流程
+
+------
+
+输入：数据集$D$
+
+输出：强分类器
+
+1. 初始化样本权重$u_{}^{(1)}=(w_{1,1},w_{1,2},...,w_{1,i}),w_{1,i}=\frac{1}{N},i=1,2,...N$
+
+2. 对于$t=1,2,...,T$
+
+   (1). 使用具有权值分布$u_{}^{(t)}$的训练集进行训练，得到弱分类器$g_t(x)$
+
+   (2). 计算$g_t(x)$在训练数据集上的分类误差率：
+   $$
+   e_t=\sum_{i=1}^{N}w_{t,i}I(g_t(x_i)\neq y_i)
+   $$
+   (3). 计算$g_t(x)$在强分类器中所占的权重：
+   $$
+   \alpha_t=\frac{1}{2}log\frac{1-e_t}{e_t}
+   $$
+   (4). 更新训练数据集的样本权重分布（$z_t$是归一化因子）
+   $$
+   w_{t+1,i}=\frac{w_{t,i}}{z_t}exp(-\alpha_ty_ig_t(x_i)),i=1,2,...,N
+   $$
+
+   $$
+   z_t=\sum_{i=1}^{N}w_{t,i}exp(-\alpha_ty_ig_t(x_i))
+   $$
+
+3. 将所有的$g_t$组合得到最终的分类器
+   $$
+   G(x)=sign(\sum_{t=1}^{T}\alpha_tg_t(x))
+   $$
+
+
+------
+
+### 公式推导
+
+**现在来推导上述公式是怎么来的，推导的前提是adaboost用于解决二分类问题，且$y_i \in \left \{1,-1\right \}$**
+
+假设已经经过t-1轮迭代，得到$G_{t-1}(x)$，由于采用加法模型，那么第t轮迭代得到$\alpha_t,g_t,G_{t}(x)$,其中
+$$
+G_{t}(x)=G_{t-1}(x)+\alpha_tg_t(x)
+$$
+AdaBoost是采用指数损失，损失函数为
+$$
+Loss=\sum_{i=1}^{N}exp(-y_iG_t(x_i))=\sum_{i=1}^{N}exp(-y_i(G_{t-1}(x_i)+\alpha_tg_t(x_i)))
+$$
+上式可以写成
+$$
+Loss=\sum_{i=1}^{N}\bar{w}_{t,i}exp(-y_i\alpha_tg_t(x_i))
+$$
+其中，$\bar{w}_{t,i}=exp(-y_iG_{t-1}(x_i))$，因为$\bar{w}_{t,i}$既不依赖$\alpha_t$，也不依赖$g_t$，所以与最小化无关，但$\bar{w}_{t,i}$依赖于$G_{t-1}(x)$，随着每一轮迭代而发生改变。
+
+现在要求使$Loss$最小的$\alpha_t,g_t$，先求$g_t(x)$，对任意$\alpha>0$，使Loss最小的$g_t(x)$可由下式得到
+$$
+g_t(x)=\mathop{\arg\min}_{g}\sum_{i=1}^{N}\bar{w}_{t,i}I(y_i \neq g(x_i))
+$$
+此分类器$g_t(x)$即为adaboost第t轮的基分类器，因为它是使第t轮加权训练数据分类误差率最小的基分类器。
+
+第二步求$\alpha_t$，继续化简Loss
+$$
+\begin{align*}
+Loss&=\sum_{i=1}^{N}\bar{w}_{t,i}exp(-y_i\alpha_tg_t(x_i))\\
+&=\sum_{y_i=g_t(x_i)}\bar{w}_{t,i}exp(-\alpha_t)+\sum_{y_i \neq g_t(x_i)}\bar{w}_{t,i}exp(\alpha_t)\\
+&=\sum_{i=1}^{N}\bar{w}_{t,i}(\frac{\sum_{y_i=g_t(x_i)}\bar{w}_{t,i}exp(-\alpha_t)}{\sum_{i=1}^{N}\bar{w}_{t,i}}+\frac{\sum_{y_i\neq g_t(x_i)}\bar{w}_{t,i}exp(\alpha_t)}{\sum_{i=1}^{N}\bar{w}_{t,i}})\\
+\end{align*}
+$$
+仔细一看，$\frac{\sum_{y_i\neq g_t(x_i)}\bar{w}_{t,i}}{\sum_{i=1}^{N}\bar{w}_{t,i}}$不就是第t轮的加权分类误差率嘛，记为$e_t$，那么Loss可以写为
+$$
+Loss=\sum_{i=1}^{N}\bar{w}_{t,i}((1-e_t)\cdot exp(-\alpha_t)+e_t\cdot exp(\alpha_t))
+$$
+对$\alpha_t$求导，令$\frac{\partial Loss }{\partial \alpha_t}=0$，得到
+$$
+\alpha_t=\frac{1}{2}log\frac{1-e_t}{e_t}
+$$
+由$G_{t}(x)=G_{t-1}(x)+\alpha_tg_t(x)$以及 $\bar{w}_{t,i}=exp(-y_iG_{t-1}(x_i))$可得
+$$
+\bar{w}_{t+1,i}=\bar{w}_{t,i}exp(-y_i\alpha_tg_t(x_i))
+$$
+
+
 ## 参考
 
 [红色石头机器学习笔记](https://blog.csdn.net/red_stone1/article/details/75075467)
 
 [台湾大学林轩田《机器学习技法》课程](https://www.bilibili.com/video/av12469267/?p=31)
+
+李航 统计学习方法
+
+[Adaboost原理详解](http://www.cnblogs.com/ScorpioLu/p/8295990.html)
+
