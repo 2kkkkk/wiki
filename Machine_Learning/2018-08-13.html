@@ -5,7 +5,7 @@
     <link rel="Stylesheet" type="text/css" href="/wiki/static/css/tango.css">
     <link rel="shortcut icon" href="/wiki/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/wiki/favicon.ico" type="image/x-icon">
-    <title>Logistic Regression - zhanghongwei's personal knowledge wiki</title>
+    <title>2018-08-13 - zhanghongwei's personal knowledge wiki</title>
     <meta name="keywords" content="technology, machine learning, data mining"/>
     <meta name="description" content="A wiki website of zhanghongwei when I learned new knowledgy and technics."/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -35,12 +35,17 @@
 <div id="container">
     
 <div id="header">
-  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Machine_Learning">Machine_Learning</a>&nbsp;»&nbsp;Logistic Regression</div>
+  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Machine_Learning">Machine_Learning</a>&nbsp;»&nbsp;2018-08-13</div>
 </div>
 <div class="clearfix"></div>
-<div id="title">Logistic Regression</div>
+<div id="title">2018-08-13</div>
 <div id="content">
-  <div class="toc"><span class="toctitle">Table of Contents</span><ul>
+  <hr />
+<p>title: "Logistic Regression"<br />
+layout: page<br />
+date: 2018-06-29 00:00</p>
+<hr />
+<div class="toc"><span class="toctitle">Table of Contents</span><ul>
 <li><a href="#logistic-regression-problem">Logistic Regression Problem</a></li>
 <li><a href="#logistic-regression-error">Logistic Regression Error</a></li>
 <li><a href="#gradient-of-logistic-regression-error">Gradient of Logistic Regression Error</a></li>
@@ -72,7 +77,7 @@ $$<br />
 <p><img src="/wiki/static/images/logistic_regression/sigmoid.png" alt="sigmoid function"/></p>
 <p>Sigmoid Function函数记为\(\theta (s)=\frac{1}{1+e^{-s}}\)，满足$(\theta (-\infty)=0,\theta (0)=0.5,\theta (+\infty)=1)$。这个函数是平滑的、单调的S型函数。则对于逻辑回归问题，hypothesis就是这样的形式：<br />
 $$<br />
-h(\mathbf{x})=\frac{1}{1+e^{-\mathbf{w}^{T}\mathbf{x}}}<br />
+  m h(\mathbf{x})=\frac{1}{1+e^{-\mathbf{w}^{T}\mathbf{x}}}<br />
 $$<br />
 那我们的目标就是求出这个预测函数h(x)，使它接近目标函数f(x)</p>
 <h2 id="logistic-regression-error">Logistic Regression Error</h2>
@@ -81,11 +86,11 @@ $$<br />
 <p>这三个线性模型都会用到线性scoring function $s=\mathbf{w}^{T}\mathbf{x}$。linear classification的误差使用的是0/1 error，linear regression的误差使用的是squared error，那么logistic regression的误差该如何定义呢？</p>
 <p>先介绍一下“似然性”的概念。目标函数$f(x)=P(+1|x)$，如果我们找到了hypothesis很接近target function， 也就是说，在所有的Hypothesis集合中找到一个hypothesis与target function最接近，那么由该hypothesis生成数据集D的似然值应该与由target function 生成数据集D的概率值很接近。</p>
 <p><img src="/wiki/static/images/logistic_regression/max_likelihood.png" alt="max_likelihood"/></p>
-<p>logistic function：$h(\mathbf{x})=\theta (\mathbf{w}^{T}\mathbf{x})$ 满足一个性质：$1−h(x)=h(−x)$， 因此似然函数可以写成:<br />
-$$<br />
+<p>logistic function：$h(\mathbf{x})=\theta (\mathbf{w}^{T}\mathbf{x})$ 满足一个性质：$1−h(x)=h(−x)$， 因此似然函数可以写成:</p>
+<p>$$<br />
 likelihood(h)=\mathbf{x}_1 \mathbf{df}_1<br />
-$$<br />
-因为$P(\mathbf{x}_{n})$对所有的hypothesis来说，都是一样的，所以我们可以忽略它，那么可以得到$likelihood(h)$正比于所有$h(y_{n}\mathbf{x}_{n})$的乘积，通常情况下target function $f$ 生成数据集D的probability很大，因此我们的目标就是让所有$h(y_{n}\mathbf{x}_{n})$的乘积值最大化。</p>
+$$</p>
+<p>因为$P(\mathbf{x}_{n})$对所有的hypothesis来说，都是一样的，所以我们可以忽略它，那么可以得到$likelihood(h)$正比于所有$h(y_{n}\mathbf{x}_{n})$的乘积，通常情况下target function $f$ 生成数据集D的probability很大，因此我们的目标就是让所有$h(y_{n}\mathbf{x}_{n})$的乘积值最大化。</p>
 <p>$$<br />
 \max_{h}\ likelihood(logistic \ h)\propto \prod_{n=1}^{N} h(y_{n}\mathbf{x}_{n})<br />
 $$</p>
@@ -95,7 +100,7 @@ $$</p>
 $$</p>
 <p>为了把连乘问题简化计算，我们可以引入ln操作，让连乘转化为连加</p>
 <p>$$<br />
-\max_{\mathbf{w}}ln \prod_{n=1}^{N} \theta (y_{n}\mathbf{w^{T}}\mathbf{x}<em _mathbf_w="\mathbf{w">{n})=\max</em>}\sum_{n=1}^{N}ln\theta (y_{n}\mathbf{w^{T}}\mathbf{x}_{n})<br />
+\max_{\mathbf{w}}ln \prod_{n=1}^{N} \theta (y_{n}\mathbf{w^{T}}\mathbf{x}_{n})=\max_{\mathbf{w}}\sum_{n=1}^{N}ln\theta (y_{n}\mathbf{w^{T}}\mathbf{x}_{n})<br />
 $$</p>
 <p>接着，我们将maximize问题转化为minimize问题，并引入平均数操作1/N：</p>
 <p>$$<br />
@@ -117,17 +122,17 @@ $$</p>
 $$<br />
 \begin{equation}<br />
 \begin{aligned}<br />
-\frac{\partial E_{in}(\mathbf{w})}{\partial w_{i}}&amp;=\frac{\partial \frac{1}{N}\sum_{n=1}^{N}ln(1+e^{-y_{n}\mathbf{w^{T}}\mathbf{x}<em i="i">{n}})}{\partial w</em>}\<br />
-&amp;= \frac{1}{N}\sum_{n=1}^{N}\frac{\partial ln(1+e^{-y_{n}\mathbf{w^{T}}\mathbf{x}<em i="i">{n}})}{\partial w</em>}\<br />
-&amp;=    \frac{1}{N}\sum_{n=1}^{N} \frac{1}{1+e^{-y_{n}\mathbf{w^{T}}\mathbf{x}<em n="n">{n}}}\frac{\partial (1+e^{-y</em>\mathbf{w^{T}}\mathbf{x}<em i="i">{n}})}{\partial w</em>}   \<br />
-&amp;=    \frac{1}{N}\sum_{n=1}^{N}(-y_{n}x_{n,i}) \frac{1}{1+e^{-y_{n}\mathbf{w^{T}}\mathbf{x}<em n="n">{n}}} e^{-y</em>\mathbf{w^{T}}\mathbf{x}<em n="1">{n}}\<br />
-&amp;= \frac{1}{N}\sum</em>^{N}(-y_{n}x_{n,i})\theta (-y_{n}\mathbf{w^{T}}\mathbf{x}<em in="in">{n})<br />
+\frac{\partial E_{in}(\mathbf{w})}{\partial w_{i}}&amp;=\frac{\partial \frac{1}{N}\sum_{n=1}^{N}ln(1+e^{-y_{n}\mathbf{w^{T}}\mathbf{x}_{n}})}{\partial w_{i}}\\<br />
+&amp;= \frac{1}{N}\sum_{n=1}^{N}\frac{\partial ln(1+e^{-y_{n}\mathbf{w^{T}}\mathbf{x}_{n}})}{\partial w_{i}}\\<br />
+&amp;=    \frac{1}{N}\sum_{n=1}^{N} \frac{1}{1+e^{-y_{n}\mathbf{w^{T}}\mathbf{x}_{n}}}\frac{\partial (1+e^{-y_{n}\mathbf{w^{T}}\mathbf{x}_{n}})}{\partial w_{i}}   \\<br />
+&amp;=    \frac{1}{N}\sum_{n=1}^{N}(-y_{n}x_{n,i}) \frac{1}{1+e^{-y_{n}\mathbf{w^{T}}\mathbf{x}_{n}}} e^{-y_{n}\mathbf{w^{T}}\mathbf{x}_{n}}\\<br />
+&amp;= \frac{1}{N}\sum_{n=1}^{N}(-y_{n}x_{n,i})\theta (-y_{n}\mathbf{w^{T}}\mathbf{x}_{n})<br />
 \end{aligned}<br />
 \end{equation}<br />
 $$<br />
 写成向量的形式<br />
 $$<br />
-\nabla E</em>(\mathbf{w})=\frac{1}{N}\sum_{n=1}^{N}\theta (-y_{n}\mathbf{w^{T}}\mathbf{x}<em n="n">{n})(-y</em>\mathbf{x_{n}})<br />
+\nabla E_{in}(\mathbf{w})=\frac{1}{N}\sum_{n=1}^{N}\theta (-y_{n}\mathbf{w^{T}}\mathbf{x}<em n="n">{n})(-y</em>\mathbf{x_{n}})<br />
 $$<br />
 为了计算$E_{in}(\mathbf{w})$最小值，就要找到让$\nabla E_{in}(\mathbf{w})$等于0的位置。<br />
 上式中，$\nabla E_{in}(\mathbf{w})$可以看成是对$(-y_{n}\mathbf{x_{n}})$的加权平均，权重为$\theta (-y_{n}\mathbf{w^{T}}\mathbf{x}<em n="n">{n})$，要想使加权和为0，一种情况是所有的权重$\theta (-y</em>\mathbf{w^{T}}\mathbf{x}<em in="in">{n})$都是0，那么可以保证$\nabla E</em>(\mathbf{w})$为0，$\theta (-y_{n}\mathbf{w^{T}}\mathbf{x}<em n="n">{n})$是sigmoid function，根据其特性，只要让$-y</em>\mathbf{w^{T}}\mathbf{x}<em n="n">{n}$≪0，即$y</em>\mathbf{w^{T}}\mathbf{x}<em n="n">{n}$≫0。$y</em>\mathbf{w^{T}}\mathbf{x}<em n="n">{n}$≫0表示对于所有的点，$y</em>和\mathbf{w^{T}}\mathbf{x}<em t_1="t+1">{n}$都是同号的，这表示数据集D必须是全部线性可分的才能成立。<br />
@@ -186,12 +191,12 @@ $$<br />
 A：机器学习基石视频里给出了思路：求出二次微分的矩阵，该矩阵是正定的，则说明函数是convex的。<br />
 <strong>需要自己证明一下！！！</strong></p>
 <p>Q：为什么logistic regression的误差不用平方损失函数？</p>
-<p>A：它会导致损失函数是一个关于参数向量 的非凸函数，而用对数损失函数就没有这种问题。凸函数的性质为我们后面求解参数向量 提供了极大便利，非凸函数有很多局部最优解，不利于求解 的计算过程。</p>
-<p>Q：有些教材里交叉熵损失函数是这样的形式：L(ŷ ,y)=−(ylog ŷ +(1−y)log (1−ŷ ))  这是因为输出y的定义是{0,1}，而不是{-1,1} 因此可以写成这样的形式，而不能写成$h(y_{n}\mathbf{x}_{n})$的形式</p>
+<p>A：它会导致损失函数是一个关于参数向量 的非凸函数，而用对数损失函数就没有这种问题。凸函数的性质为我们后面求解参数向量 提供了极大便利，非凸函数有很多局部最优解，不利于求解 的计算过程。</p>
+<p>Q：有些教材里交叉熵损失函数是这样的形式：L(ŷ ,y)=−(ylog ŷ +(1−y)log (1−ŷ ))  这是因为输出y的定义是{0,1}，而不是{-1,1} 因此可以写成这样的形式，而不能写成$h(y_{n}\mathbf{x}_{n})$的形式</p>
 <h2 id="_3">个人总结</h2>
 <p>逻辑斯蒂回归用来处理二分类问题，大多数资料的推导过程中是设定类别$y^{i}\in  \left { 0,1 \right }$的，也有的教材设定$y\in  \left { -1,1 \right }$ </p>
 <ol>
-<li>Logistic的假设函数为$h_{\theta}(\mathbf{x})=\frac{1}{1+e^{-\mathbf{\theta}^{T}\mathbf{x}}}$，函数输出是介于（0，1）之间的，也就表明了属于某一类别的<strong>概率</strong>。对于输入x分类结果为类别1和类别0的概率分别为： </li>
+<li>Logistic的假设函数为$h_{\theta}(\mathbf{x})=\frac{1}{1+e^{-\mathbf{\theta}^{T}\mathbf{x}}}$，函数输出是介于（0，1）之间的，也就表明了属于某一类别的<strong>概率</strong>。对于输入x分类结果为类别1和类别0的概率分别为： </li>
 </ol>
 <p>$$<br />
 P(y=1|x;\theta)=h_{\theta}(x)\<br />
@@ -291,7 +296,7 @@ $$<br />
 \frac{\partial J^2(\boldsymbol{\theta}) }{\partial \theta_j \partial \theta_k}=\frac{1}{N}\sum_{i=1}^{N}(h^2_{\theta}(x^{(i)})\cdot e^{-\theta^Tx^{(i)}}\cdot x_k^{(i)})x_j^{(i)}<br />
 $$</p>
 <h2 id="softmax">softmax 回归</h2>
-<p>Softmax回归模型是logistic回归模型在多分类问题上的推广，对于多分类问题，$y^{i}\in  \left {1,2,3,...,k\right }$，对于给定的测试输入x，我们想用假设函数针对每一个类别$j$估算出概率值$P(y=j|x)$，因此，我们的假设函数将要输出一个 k维的向量（向量元素的和为1）来表示这k个估计的概率值。 具体地说，我们的假设函数$h_{\theta}({x})$形式如下：<br />
+<p>Softmax回归模型是logistic回归模型在多分类问题上的推广，对于多分类问题，$y^{i}\in  \left {1,2,3,...,k\right }$，对于给定的测试输入x，我们想用假设函数针对每一个类别$j$估算出概率值$P(y=j|x)$，因此，我们的假设函数将要输出一个 k维的向量（向量元素的和为1）来表示这k个估计的概率值。 具体地说，我们的假设函数$h_{\theta}({x})$形式如下：<br />
 $$<br />
 h_{\theta}(x^{(i)})=\begin{bmatrix}<br />
 P(y^{(i)}=1|x^{(i)};\theta)\ <br />
@@ -316,7 +321,7 @@ $$<br />
 \bold{\theta}_k^T<br />
 \end{bmatrix}<br />
 $$<br />
- softmax 回归算法的代价函数也是logistic回归代价函数的推广，logistic回归代价函数可以改为<br />
+ softmax 回归算法的代价函数也是logistic回归代价函数的推广，logistic回归代价函数可以改为<br />
 $$<br />
 \begin{align<em>}<br />
 J(\theta)&amp;=-\frac{1}{N}\left [\sum_{i=1}^{N}y^{(i)}logh_{\theta}(x^{(i)})+(1-y^{(i)})log(1-h_{\theta}(x^{(i)}))\right]\<br />
@@ -330,7 +335,7 @@ J(\theta)<br />
 &amp;=-\frac{1}{N}\left [\sum_{i=1}^{N}\sum_{j=0}^{k}1\left {y^{(i)}=j  \right }log\frac{e^{\boldsymbol{\theta}{{}}<em l="1">j^Tx^{(i)}}}{\sum</em>^{k}e^{\boldsymbol{\theta}{{}}_l^Tx^{(i)}}}\right]<br />
 \end{align</em>}<br />
 $$<br />
-Softmax代价函数与logistic 代价函数在形式上非常类似，只是在Softmax损失函数中对类标记的 $k$个可能值进行了累加。注意在Softmax回归中将 $x$分类为类别 $j$的概率为：<br />
+Softmax代价函数与logistic 代价函数在形式上非常类似，只是在Softmax损失函数中对类标记的 $k$个可能值进行了累加。注意在Softmax回归中将 $x$分类为类别 $j$的概率为：<br />
 $$<br />
 p(y^{(i)}=j|x^{(i)};\theta)=\frac{e^{\boldsymbol{\theta}{{}}_j^Tx^{(i)}}}{\sum</em>^{k}e^{\boldsymbol{\theta}{{}}_l^Tx^{(i)}}}<br />
 $$<br />
@@ -343,14 +348,14 @@ $$<br />
 <li><a href="https://www.zhihu.com/question/40181086">怎样理解凸函数与Hessian矩阵半正定</a></li>
 </ol>
 </div>
-<div id="content-footer">created in <span class="create-date date"> 2018-06-29 00:00 </span></div>
+<div id="content-footer">created in <span class="create-date date"> 2018-08-13 14:43 </span></div>
 <div id="comments"></div>
 <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
 <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
 <script type="text/javascript">
 const gitment = new Gitment({
   id: '<%= page.date %>',
-  title: 'Logistic Regression',
+  title: '2018-08-13',
   owner: '2kkkkk',
   repo: 'wiki',
   oauth: {
