@@ -1,7 +1,7 @@
 ---
 date: 2018-08-13 10:50
 status: public
-title:
+title: lr
 ---
 
 ---
@@ -331,9 +331,9 @@ $$
 用符号$\boldsymbol \theta$来表示所有的模型参数，将$\boldsymbol \theta$用一个$k \times (n+1)$矩阵来表示，n为特征维度数，该矩阵是将$\boldsymbol{\theta}\_1,\boldsymbol{\theta}\_2,...,\boldsymbol{\theta}\_k$按行罗列起来的，如下所示
 $$
 \boldsymbol \theta=\begin{bmatrix}
-\boldsymbol{\theta}\_1^T\\ 
-\boldsymbol{\theta}\_2^T\\ 
-\vdots \\ 
+\boldsymbol{\theta}\_1^T\\\\ 
+\boldsymbol{\theta}\_2^T\\\\
+\vdots \\\\
 \boldsymbol{\theta}\_k^T
 \end{bmatrix}
 $$
@@ -358,4 +358,3 @@ $$
 2. [机器学习基石课程](https://www.bilibili.com/video/av12463015/?p=41)
 3. [softmax](http://deeplearning.stanford.edu/wiki/index.php/Softmax%E5%9B%9E%E5%BD%92)
 4. [怎样理解凸函数与Hessian矩阵半正定](https://www.zhihu.com/question/40181086)
-
