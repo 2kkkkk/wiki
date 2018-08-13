@@ -11,11 +11,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width" />
 
-    <script type="text/x-mathjax-config">         
-        MathJax.Hub.Config({           
-            tex2jax: {inlineMath: [['$','$']]}
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+          tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
         });
-    </script>
+        </script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
 
@@ -66,11 +66,11 @@
 $$<br />
 E_{in}^u(h)=\frac{1}{N}\sum_{n=1}^{N}u_n\cdot err(y_n,h(x_n))<br />
 $$<br />
-每个犯错误的样本点乘以相应的权重，求和再平均，最终得到了$ E_{in}^u(h) $。如果在决策树中使用这种方法，将当前分支下犯错误的点赋予权重，每层分支都这样做，会比较复杂，不易求解。为了简化运算，保持决策树算法本身的稳定性和封闭性，我们可以把决策树算法当成一个黑盒子，即不改变其结构，不对算法本身进行修改，而从数据来源D’上做一些处理。按照这种思想，我们可以这样来看，如果对D’进行抽样，那么样本权重u实际上表示该样本在抽样中出现的次数，反映了它出现的概率；权重越大，出现概率越大。那么可以根据u值，对原样本集D进行一次重新的随机sampling，也就是带权重的随机抽样。sampling之后，会得到一个新的D’，D’中每个样本出现的几率与它权重u所占的比例应该是差不多接近的。因此，使用带权重的sampling操作，得到了新的样本数据集D’，可以直接代入决策树进行训练，从而无需改变决策树算法结构。这种对数据本身进行修改而不更改算法结构的方法非常重要！ </p>
+每个犯错误的样本点乘以相应的权重，求和再平均，最终得到了$E_{in}^u(h)$。如果在决策树中使用这种方法，将当前分支下犯错误的点赋予权重，每层分支都这样做，会比较复杂，不易求解。为了简化运算，保持决策树算法本身的稳定性和封闭性，我们可以把决策树算法当成一个黑盒子，即不改变其结构，不对算法本身进行修改，而从数据来源D’上做一些处理。按照这种思想，我们可以这样来看，如果对D’进行抽样，那么样本权重u实际上表示该样本在抽样中出现的次数，反映了它出现的概率；权重越大，出现概率越大。那么可以根据u值，对原样本集D进行一次重新的随机sampling，也就是带权重的随机抽样。sampling之后，会得到一个新的D’，D’中每个样本出现的几率与它权重u所占的比例应该是差不多接近的。因此，使用带权重的sampling操作，得到了新的样本数据集D’，可以直接代入决策树进行训练，从而无需改变决策树算法结构。这种对数据本身进行修改而不更改算法结构的方法非常重要！ </p>
 <p>所以，AdaBoost-DTree结合了AdaBoost和DTree，但是做了一点小小的改变，就是使用sampling替代权重$u^{(t)}$，效果是相同的。</p>
 <p>上面我们通过使用sampling，将不同的样本集代入决策树中，得到不同的$g_t$。除此之外，我们还要确定每个$g_t$所占的权重$α_t$。之前我们在AdaBoost中已经介绍过，首先算出每个$g_t$的错误率$ϵ_t$，然后计算权重： <br />
 $$<br />
-α_t=ln\lozenge t=ln\sqrt{\frac{1-\epsilon_{t}}{\epsilon_{t}}}<br />
+α_t=ln\lozenge t=ln\sqrt{\frac{1-\epsilon <em t="t">{t}}{\epsilon </em>}}<br />
 $$<br />
 如果现在有一棵完全长成的树（fully grown tree），由所有的样本$x_n$训练得到。若每个样本都不相同的话，一刀刀切割分支，直到所有的$x_n$都被完全分开。这时候，$E_{in}(g_t)=0$，加权的$E_{in}^{u}(g_t)=0$，而且$ϵ_t$也为0，从而得到权重$α_t=∞$。$α_t=∞$表示该$g_t$所占的权重无限大，相当于它一个就决定了$G$结构，而其它的$g_t$对$G$没有影响。</p>
 <p>显然$α_t=∞$不是我们想看到的，因为"独裁"总是不好的，我们希望使用aggregation将不同的$g_t$结合起来，发挥集体智慧来得到最好的模型$G$。首先，我们来看一下什么原因造成了$α_t=∞$。有两个原因：一个是使用了所有的样本$x_n$进行训练；一个是树的分支过多，fully grown。针对这两个原因，我们可以对树做一些修剪（pruned），比如只使用一部分样本，这在sampling的操作中已经起到这类作用，因为必然有些样本没有被采样到。除此之外，我们还可以限制树的高度，让分支不要那么多，从而避免树fully grown。</p>
@@ -87,10 +87,10 @@ u_{n}^{t}/ \lozenge t\ \ &amp;   if \ correct&amp;<br />
 $$<br />
 <strong>对于二分类问题</strong>，<br />
 $$<br />
-\begin{align}<br />
-u_{n}^{t+1}&amp;=u_{n}^{t}\cdot \lozenge t^{-y_ng_t(x_n)}\\<br />
+\begin{align<em>}<br />
+u_{n}^{t+1}&amp;=u_{n}^{t}\cdot \lozenge t^{-y_ng_t(x_n)}\<br />
 &amp;=u_{n}^{t}\cdot exp(-y_n\alpha_tg_t(x_n)<br />
-\end{align}<br />
+\end{align</em>}<br />
 $$<br />
 其中，对于incorrect样本，$y_ng_t(x_n)&lt;0$，对于correct样本，$y_ng_t(x_n)&lt;0$。从上式可以看出，$u_{n}^{t+1}$由$u_{n}^{t}$与某个常数相乘得到。所以，最后一轮更新的$u_{n}^{t+1}$可以写成$u_{n}^{1}$的级联形式，我们之前令$u_{n}^{1}=1/N$，则有如下推导:<br />
 $$<br />
