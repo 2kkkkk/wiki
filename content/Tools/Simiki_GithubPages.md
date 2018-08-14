@@ -196,3 +196,4 @@ markdown文件采用Typora软件编写
    - 每次执行simiki g 都会重新生成所有的html文件，因此先将之前的所有html文件备份，然后用`simiki g`命令编译
    - 由于直接编译生成的html公式显示有问题，因此用Typora直接导出新编写的md文件为html文件，合并入之前的备份下的含有html的对应文件夹中，然后替换掉`output`下的对应文件夹
    - 执行`fab deploy`提交`output`文件夹到远程`wiki`仓库`gh-pages`分支
+## 2018/08/14更新
