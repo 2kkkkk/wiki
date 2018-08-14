@@ -208,7 +208,7 @@ windows安装git：https://msysgit.github.com/
 #####2.1 配置ssh
 检查本机是否有ssh key设置`cd ~/.ssh`，如果没有则提示： No such file or director。如果有则进入~/.ssh路径下（ls查看当前路径文件，rm * 删除所有文件）
 `cd ~`
-`·ssh-keygen -t rsa -C "你登录github的邮箱"`
+`ssh-keygen -t rsa -C "你登录github的邮箱"`
 登录github，点击头像进入设置，进入`SSH and GPG keys`，点击`New SSH key`，复制id_rsa.pub的公钥内容到key输入框中，title输入框随便输入，最后点击`Add Key`
 测试是否链接成功，`ssh -T -v git@github.com`
 设置帐户：
