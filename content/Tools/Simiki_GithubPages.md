@@ -197,3 +197,29 @@ markdown文件采用Typora软件编写
    - 由于直接编译生成的html公式显示有问题，因此用Typora直接导出新编写的md文件为html文件，合并入之前的备份下的含有html的对应文件夹中，然后替换掉`output`下的对应文件夹
    - 执行`fab deploy`提交`output`文件夹到远程`wiki`仓库`gh-pages`分支
 ## 2018/08/14更新
+费了半天劲才找出`simiki g`生成的页面公式显示不正确的原因，原来是公式渲染用到的是mathjax，而mathjax与markdwon解析器存在语法冲突：mathjax认为下划线\_表示下标，而markdown解析器认为下划线_表示斜体，因此就出现了公式中本来是下标的部分变成了斜体。  
+解决方法是修改markdown解析语法或者修改解析顺序，但操作难度太大，能力有限啊。。。还有一种办法就是在下划线等冲突符号前加一个转义字符\\进行转义，用这种方法的话，如果 想要实时预览，就要找到能同时支持markdown和mathjax的博客平台，真的是太难找了，不过还好我没放弃，终于邂逅了FarBox，完美支持markdown和mathjax，跟`simiki g`生成的网页一毛一样。但是问题又来了，Farbox的linux版本官方很早就不再维护了，最新的版本在ubuntu16.04中无法运行，因此只能转向windwos系统。  
+最终解决方案：win10+simiki+FarBox
+### win10下simiki+ github pages搭建部署个人wiki
+####1 安装simiki
+首先装好python和pip，然后用命令`pip install simiki`即可安装simiki。注意：如果是用anaconda安装的python，会出现pyyaml包无法卸载的问题，需要用`conda uninstall pyyaml`先将conda管理的yaml包卸载，然后再`pip install simiki`，就可以解决包冲突问题了。最后再`conda install anaconda-navigator`将刚才卸载pyyaml时附加卸载的navigator装上就可以了。 
+windows安装git：https://msysgit.github.com/
+####2 部署到github pages
+#####2.1 配置ssh
+检查本机是否有ssh key设置`cd ~/.ssh`，如果没有则提示： No such file or director。如果有则进入~/.ssh路径下（ls查看当前路径文件，rm * 删除所有文件）
+`cd ~`
+`·ssh-keygen -t rsa -C "你登录github的邮箱"`
+登录github，点击头像进入设置，进入`SSH and GPG keys`，点击`New SSH key`，复制id_rsa.pub的公钥内容到key输入框中，title输入框随便输入，最后点击`Add Key`
+测试是否链接成功，`ssh -T -v git@github.com`
+设置帐户：
+
+    git config --global user.name "2kkkkk" 
+    git config --global user.email "568581045@qq.com"
+#####2.2 部署到github
+如果不是第一次部署，可以直接跳到第3步
+1.先将`master`分支克隆到本地：`git clone git@github.com:2kkkkk/wiki.git`
+2.为确保用ssh而不是http连接，可以更新下origin：
+
+    git remote remove origin
+    git remote add origin git@github.com:2kkkkk/wiki.git
+3.将写好的md文件放进`content`文件夹下，然后命令行进入到`wiki`文件夹：`cd wiki`，执行脚本：`deploy heiheihei`（如果是第一次部署的话，需要先执行`deploy -i`,再执行`deploy heiheihei` ）
