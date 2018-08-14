@@ -1,10 +1,4 @@
 ---
-date: 2018-08-13 10:50
-status: public
-title: lr
----
-
----
 title: "Logistic Regression"
 layout: page
 date: 2018-06-29 00:00
