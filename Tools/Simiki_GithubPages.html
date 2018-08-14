@@ -260,7 +260,7 @@ windows安装git：https://msysgit.github.com/</p>
 <h5 id="21-ssh">2.1 配置ssh</h5>
 <p>检查本机是否有ssh key设置<code>cd ~/.ssh</code>，如果没有则提示： No such file or director。如果有则进入~/.ssh路径下（ls查看当前路径文件，rm * 删除所有文件）<br />
 <code>cd ~</code><br />
-<code>·ssh-keygen -t rsa -C "你登录github的邮箱"</code><br />
+<code>ssh-keygen -t rsa -C "你登录github的邮箱"</code><br />
 登录github，点击头像进入设置，进入<code>SSH and GPG keys</code>，点击<code>New SSH key</code>，复制id_rsa.pub的公钥内容到key输入框中，title输入框随便输入，最后点击<code>Add Key</code><br />
 测试是否链接成功，<code>ssh -T -v git@github.com</code><br />
 设置帐户：</p>
