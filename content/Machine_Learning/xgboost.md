@@ -50,10 +50,10 @@ obj^{(t)}=\sum_{i=1}^{n}[l(y_i,\hat{y_i}^{(t-1)})+g_if_t(x_i)+\frac{1}{2}h_if^2_
 $$
 其中，
 $$
-\begin{align*}
+\begin{align}
 g_i=\frac{\partial l(y_i,\hat{y_i}^{(t-1)})}{\partial \hat{y_i}^{(t-1)}}\\\\
 h_i=\frac{\partial^2 l(y_i,\hat{y_i}^{(t-1)})}{\partial (\hat{y_i}^{(t-1)})^2}\\
-\end{align*}
+\end{align}
 $$
 分别表示损失函数在当前模型的一阶导和二阶导，每一个样本都可以计算出该样本点的$g_i$和$h_i$，而且样本点之间的计算可以独立进行，互不影响，也就是说，可以并行计算。
 
