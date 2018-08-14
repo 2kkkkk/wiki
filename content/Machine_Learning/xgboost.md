@@ -82,10 +82,10 @@ $\gamma ​$和$\lambda​$ 越大，树越简单。
 
 将复杂度代入式（4）并做变形，得到
 $$
-\begin{align*}
+\begin{align}
 obj^{(t)}&=\sum_{i=1}^{n}[g_iw_{q(x_i)}+\frac{1}{2}h_iw^2_{q(x_i)}]+\gamma T+\frac{1}{2}\lambda \sum_{j=1}^{T}w_j^2\\\\
 &=\sum_{j=1}^{T}[(\sum_{i\in I_j}g_i)w_j+\frac{1}{2}(\sum_{i\in I_j}h_i+\lambda)w_j^2]+\gamma T
-\end{align*}
+\end{align}
 $$
 $I_j$代表一个集合，集合中每个值代表一个训练样本的序号，整个集合就是被第t棵CART树分到了第j个叶子节点上的所有训练样本。令$G_j=\sum_{i\in I_j}g_i$和$H_j=\sum_{i\in I_j}h_i$
 $$
