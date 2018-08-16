@@ -33,7 +33,9 @@ $$
 
 那么对于整个假设空间$\mathcal{H}$，也就是这M个假设函数，可以推导出下面不等式：
 $$
-P(|E_{in}(h_1)-E_{out}(h_1)|>\epsilon \cup |E_{in}(h_2)-E_{out}(h_2)|>\epsilon  \cdots \cup |E_{in}(h_m)-E_{out}(h_m)|>\epsilon)\\\leqslant P(|E_{in}(h_1)-E_{out}(h_1)|>\epsilon)+P(|E_{in}(h_2)-E_{out}(h_2)|>\epsilon)+\cdots +P(|E_{in}(h_m)-E_{out}(h_m)|>\epsilon)\\\leqslant2Mexp(-2\epsilon ^2N)
+P(|E_{in}(h_1)-E_{out}(h_1)|>\epsilon \cup |E_{in}(h_2)-E_{out}(h_2)|>\epsilon  \cdots \cup |E_{in}(h_m)-E_{out}(h_m)|>\epsilon)\\\\
+\leq  P(|E_{in}(h_1)-E_{out}(h_1)|>\epsilon)+P(|E_{in}(h_2)-E_{out}(h_2)|>\epsilon)+\cdots +P(|E_{in}(h_m)-E_{out}(h_m)|>\epsilon)\\\\
+\leq 2Mexp(-2\epsilon ^2N)
 $$
 上面式子的含义是：在假设空间$\mathcal{H}$中，设定一个较小的值$\epsilon$，任意一个假设h，它的$E_{in}(h)$与$E_{out}(h)$的差由该值所约束住。注意这个bound值与 “样本数N和假设数M” 密切相关。
 
@@ -94,9 +96,9 @@ H作用于D“最多”能产生多少种不同的dichotomies？这个数量与�
 | $\mathcal{H}$      | Growth Function    |
 | :----------------- | ------------------ |
 | Positive rays      | N+1                |
-| positive intervals | $\binom{n+1}{2}+1$ |
-| Convex sets        | $2^{n}$            |
-| 2D perceptrons     | <$2^{n}$           |
+| positive intervals | $\\binom{n+1}{2}+1$ |
+| Convex sets        | $2^\{n}$            |
+| 2D perceptrons     | <$2^\{n}$           |
 
 求解出$m_\mathcal{H}(N)$后，那是不是可以考虑用$m_\mathcal{H}(N)$替换M? 如下所示：
 $$
@@ -111,7 +113,7 @@ Shatter的概念：当$\mathcal{H}$作用于有N个inputs的$D$时，产生的di
 
 对于给定的成长函数$m_\mathcal{H}(N)$，从N=1出发，N慢慢变大，当增大到k时，出现$m_\mathcal{H}(N)<2^N$的情形，则我们说k是该成长函数的**break point**。对于任何N > k个inputs而言，$\mathcal{H}$都没有办法再shatter他们了。
 
-举例来说，对于上面的positive ray的例子，因为$m_\mathcal{H}(N)=N+1$，当N=2时，$m_\mathcal{H}(N)<2^2$， 所以它的break point就是2。
+举例来说，对于上面的positive ray的例子，因为$m_\mathcal{H}(N)=N+1$，当N=2时，$m_\mathcal{H}(N)<2^2$， 所以它的break point就是2。
 
 ### VC bound
 
@@ -161,7 +163,8 @@ VC维反映了假设空间H 的强大程度(powerfulness)，VC 维越大，H也�
 
 <img src="/wiki/static/images/adaboost/vc_power2.png" alt="joey"/>
 
-模型较复杂时(d_vc 较大)，需要更多的训练数据。 理论上，数据规模N 约等于 10000\*d_vc（称为采样复杂性，sample complexity)。然而，实际经验是，只需要 N = 10\*d_vc。 造成理论值与实际值之差如此之大的最大原因是，VC Bound 过于宽松了，我们得到的是一个比实际大得多的上界。
+模型较复杂时(d_vc 较大)，需要更多的训练数据。 理论上，数据规模N 约等于10000*$d_{vc}$（称为采样复杂性，sample complexity)。然而，实际经验是，只需要 
+N = 10*$d_{vc}$。 造成理论值与实际值之差如此之大的最大原因是，VC Bound 过于宽松了，我们得到的是一个比实际大得多的上界。
 
 注意在前述讨论中，理想的目标函数为f(x)，error measure用的是“0–1 loss”。如果在unknown target上引入噪声(+noise)，或者用不同的error measure方法，VC theory还有效吗？这里只给出结论，VC theory对于绝大部分假设空间(or 加入噪声)和error度量方法，都是有效的。
 
