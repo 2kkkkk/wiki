@@ -40,10 +40,10 @@ $$
 
 **对于二分类问题,我们知道AdaBoost中的权重的迭代计算如下所示：**
 $$
-\begin{align*}
+\begin{align}
 u_{n}^{t+1}&=u_{n}^{t}\cdot \lozenge t^{-y_ng_t(x_n)}\\\\
 &=u_{n}^{t}\cdot exp(-y_n\alpha_tg_t(x_n)
-\end{align*}
+\end{align}
 $$
 其中，对于incorrect样本，$y_ng_t(x_n)<0$，对于correct样本，$y_ng_t(x_n)<0$。从上式可以看出，$u_{n}^{t+1}$由$u_{n}^{t}$与某个常数相乘得到。所以，最后一轮更新的$u_{n}^{t+1}$可以写成$u_{n}^{1}$的级联形式，我们之前令$u_{n}^{1}=1/N$，则有如下推导:
 $$
@@ -115,7 +115,7 @@ $$
 $$
 然后对η求导，令$\frac{\partial \hat{E}\_{ADA}}{\partial \eta}=0$，得：
 $$
-\eta_t=\sqrt{\frac{1-\epsilon _{t}}{\epsilon _{t}}}=\alpha_t
+\eta_t=\sqrt{\frac{1-\epsilon_{t}}{\epsilon_{t}}}=\alpha_t
 $$
 由此看出，最大的步进长度就是$α_t$，即AdaBoost中计算$g_t$所占的权重。所以，AdaBoost算法所做的其实是在gradient descent上找到下降最快的方向和最大的步进长度。这里的方向就是$g_t$，它是一个函数，而步进长度就是$α_t$。也就是说，在AdaBoost中确定$g_t$和$α_t$的过程就相当于在gradient descent上寻找最快的下降方向和最大的步进长度。
 
@@ -279,10 +279,10 @@ L(y,f(x))=(y-f(x))^2
 $$
 ​	第m步的损失为
 $$
-\begin{align*}
-L\left (y,f_{m-1}(x)+T(x;\Theta_m)\right)&=\left [y-f_{m-1}(x)-T(x;\Theta_m)\right]^2\\
+\begin{align}
+L\left (y,f_{m-1}(x)+T(x;\Theta_m)\right)&=\left [y-f_{m-1}(x)-T(x;\Theta_m)\right]^2\\\\
 &=[r-T(x;\Theta_m)]^2
-\end{align*}
+\end{align}
 $$
 ​	这里，
 $$

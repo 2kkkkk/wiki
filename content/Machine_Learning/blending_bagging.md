@@ -88,23 +88,23 @@ uniform blending for regression对应两种情况：
 
 刚才我们提到了uniform blending for regression中，计算$g_t$的平均值可能比单一的$g_t$更稳定，更准确。下面进行简单的推导和证明，对于某一个单一的样本点$\boldsymbol{x}$，以平方误差为例，
 $$
-\begin{align*}
+\begin{align}
 avg((g_t(\boldsymbol{x})-f(\boldsymbol{x}))^2)  &=avg (g_t^2-2g_tf+f^2)\\\\
  &=avg (g_t^2)-2Gf+f^2\\\\
  &=avg (g_t^2)-G^2+(G-f)^2\\\\
  &=avg (g_t^2)-2G^2+G^2+(G-f)^2\\\\
  &=avg (g_t^2)-2g_tG^2+G^2+(G-f)^2\\\\
  &=avg (g_t-G)^2+(G-f)^2\\\\
-\end{align*}
+\end{align}
 $$
 推导过程中注意$G(t)=avg(g_t)$，即对所有的$g_t$做$avg$
 
 刚才是对单一的$\boldsymbol{x}$进行证明，如果从期望角度，对整个$\boldsymbol{x}$分布进行上述公式的整理，得到：
 $$
-\begin{align*}
+\begin{align}
 avg(E_{out}(g_t))&=avg(\boldsymbol{\varepsilon}  (g_t-G)^2)+E_{out}(G)\\\\
 & \geqslant E_{out}(G)
-\end{align*}
+\end{align}
 $$
 也就是说，$G$的表现要比$g_t$的平均表现要好，**注意，是$g_t$的平均表现，而不是某一个$g_t$的表现，视频中是这样说的，“最好的$g_t$的表现是否比G好，我们不知道，但是所有的$g_t$的平均表现要比G差“**，这个结果给了我们做aggregation这件事一点点的保证，那么怎样运用这个事情呢？现在假设一个抽象的机器学习过程：
 

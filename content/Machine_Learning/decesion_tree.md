@@ -185,10 +185,10 @@ $$
 
 ​	因此，我们可以将信息增益的计算式推广为
 $$
-\begin{align*}
- Gain(D,a) &= \rho \times Gain(\tilde{D},a)\\
+\begin{align}
+ Gain(D,a) &= \rho \times Gain(\tilde{D},a)\\\\
  &=\rho \times (Ent(\tilde{D})-\sum_{v=1}^{V}\tilde{r_{v}}Ent(\tilde{D}^{v}))
-\end{align*}
+\end{align}
 $$
 其中，
 $$
