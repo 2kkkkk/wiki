@@ -240,10 +240,10 @@ $$</p>
 <p>直观的看，对属性$a$，$\rho$表示无缺失值样本所占的比例，$\tilde{p_{k}}$表示无缺失值样本中第k类所占的比例，$\tilde{r_{v}}$表示无缺失值样本中在属性$a$上取值$a^{v}$的比例，显然，$\sum_{k=1}^{\mathcal{Y}}\tilde{p_{k}}=1,\sum_{v=1}^{V}\tilde{r_{v}}=1$.</p>
 <p>​   因此，我们可以将信息增益的计算式推广为<br />
 $$<br />
-\begin{align<em>}<br />
- Gain(D,a) &amp;= \rho \times Gain(\tilde{D},a)\<br />
+\begin{align}<br />
+ Gain(D,a) &amp;= \rho \times Gain(\tilde{D},a)\\<br />
  &amp;=\rho \times (Ent(\tilde{D})-\sum_{v=1}^{V}\tilde{r_{v}}Ent(\tilde{D}^{v}))<br />
-\end{align</em>}<br />
+\end{align}<br />
 $$<br />
 其中，<br />
 $$<br />

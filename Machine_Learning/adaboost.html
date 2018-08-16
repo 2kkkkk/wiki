@@ -89,11 +89,11 @@ $$<br />
 <img src="/wiki/static/images/adaboost/ad2.png" alt="line"/></p>
 <p>​   如上所示，$g_{t}$是由$u^{t}$最小化$E_{in}(h)$到的，$g_{t+1}$是由$u_{n}^{t+1}$最小化$E_{in}(h)$得到的。如果$g_{t}$这个模型在使用$u_{n}^{t+1}$的时候得到的$E_{in}(h)$最大，那就表示由$u^{t+1}$计算的$g_{t+1}$会与$g_{t}$有很大不同，而这正是我们希望看到的。怎么做呢？如果在$g_{t}$作用下，$u_{n}^{t+1}$中的表现（即error）近似为0.5的时候，表明$g_{t}$对$u_{n}^{t+1}$的预测分类没有什么作用，就像抛硬币一样，是随机选择的，其数学表达式如下所示：<br />
 $$<br />
-\begin{align<em>}<br />
+\begin{align}<br />
 idea: construct \ u^{t+1} \ to\ make\ g_{t}\ randomlike:\<br />
 \<br />
 \frac{\sum_{n=1}^{N}u_{n}^{t+1}\left [ y\neq h(\mathbf{x}) \right ] }{\sum_{n=1}^{N}u_{n}^{t+1}}<br />
-\end{align</em>}<br />
+\end{align}<br />
 $$<br />
 ​   乍看上面这个式子，似乎不好求解。但是，我们对它做一些等价处理，其中分式中分子可以看成$g_{t}$作用下犯错误的点，而分母可以看成犯错的点和没有犯错误的点的集合，即所有样本点。其中犯错误的点和没有犯错误的点分别用橘色方块和绿色圆圈表示：</p>
 <p><img src="/wiki/static/images/adaboost/yuanquan.png" alt="yuanquan"/></p>
