@@ -137,8 +137,10 @@ $$<br />
 <ol>
 <li>for .....</li>
 <li>​    从特征集A中选择最优划分特征$a_{*}$</li>
-<li>​    for <strong>$a_{<em>}$的每一个取值$a_{</em>}^{v}$</strong>:</li>
-<li>​        为结点生成一个分支，令$D_v$表示$D$中在$a_{<em>}$中取值为$a_{</em>}^{v}$的样本子集</li>
+<li>​    for$a_{*}$的每一个取值<br />
+  \     $a_{*}^{v}$:</li>
+<li>​        为结点生成一个分支，令$D_v$表示$D$中在$a_{*}$<br />
+中取值为$a_{*}^{v}$的样本子集</li>
 <li>​        if $D_v$为空：将分支结点标记为叶结点，其类别标记为$D$中样本最多的</li>
 <li>​                else： 以($D_v$，$A-a_{*}$)为分支结点继续划分</li>
 </ol>
@@ -217,9 +219,7 @@ $$<br />
 <h3 id="_7">连续值</h3>
 <p>由于连续特征的可取值数目不再有限，因此，不能直接根据连续特征的可取值来对结点进行划分，最简单的策略是是采用二分法进行处理。</p>
 <p>给定样本集$D$和连续特征$a$，假定$a$在$D$上出现了n个不同的取值，将这些值从小到大进行排序，记为${a^{1},a^{2},a^{3}...,a^{n}}$。基于划分点t可将$D$分为子集$D_{t}^{+}$和$D_{t}^{-}$，其中$D_{t}^{-}$包含那些在属性$a$上取值不大于t的样本，而$D_{t}^{+}$包含那些在属性$a$上取值大于t的样本。显然，对相邻的属性取值$a^{i}$和$a^{i+1}$来说，t在区间$[a^{i},a^{i+1})$中取任意值所产生的划分结果一致，因此，对连续属性$a$，我们考察包含n-1个元素的候选划分点集合<br />
-$$<br />
-T_{a}=\left { \frac{a^{i}+a^{i+1}}{2} |1\leqslant  i\leqslant n-1|\right }<br />
-$$<br />
+<img src="/wiki/static/images/adaboost/ee.png" alt="shu"/><br />
 即把区间$[a^{i},a^{i+1})$的中位点$\frac{a^{i}+a^{i+1}}{2} $作为候选划分点。然后，我们就可以像离散属性值一样来考虑这些划分点。</p>
 <p><strong>需要注意的是，与离散属性不同，若当前结点划分属性为连续属性，该属性还可以作为其后代结点的划分属性</strong></p>
 <h3 id="_8">缺失值</h3>
@@ -227,7 +227,7 @@ $$<br />
 </pre></div>
 
 
-<p>​   给定训练集D和属性$a$，令$\tilde{D}$表示D中在属性$a$上没有缺失值得样本子集，对于问题（1），显然仅可根据$\tilde{D}$来判断属性$a$的优劣。假定属性$a$有V个取值${a^{1},a^{2},...,a^{V}}$，令$\tilde{D}^{v}$表示$\tilde{D}$中在属性$a$上取值为$a^{v}$的样本子集，$\tilde{D}<em k="1">{k}$表示$\tilde{D}$中属于第k类$(k=1,2...,\left | \mathcal{Y} \right |)$的样本子集，则显然有$\tilde{D}=\bigcup </em>^{ \mathcal{|Y|}}\tilde{D}<em v="1">{k}$，$\tilde{D}=\bigcup </em>^{ \mathcal{|V|}}\tilde{D}^{v}$，假定我们为每个样本$\mathbf{x}$赋予一个权重$w_\mathbf{x}$，并定义<br />
+<p>​   给定训练集D和属性$a$，令$\tilde{D}$表示D中在属性$a$上没有缺失值得样本子集，对于问题（1），显然仅可根据$\tilde{D}$来判断属性$a$的优劣。假定属性$a$有V个取值${a^{1},a^{2},...,a^{V}}$，令$\tilde{D}^{v}$表示$\tilde{D}$中在属性$a$上取值为$a^{v}$的样本子集，$\tilde{D}_{k}$表示$\tilde{D}$中属于第k类$(k=1,2...,\left | \mathcal{Y} \right |)$的样本子集，则显然有$\tilde{D}=\bigcup_{k=1}^{ \mathcal{|Y|}}\tilde{D}_{k}$，$\tilde{D}=\bigcup_{v=1}^{ \mathcal{|V|}}\tilde{D}^{v}$，假定我们为每个样本$\mathbf{x}$赋予一个权重$w_\mathbf{x}$，并定义<br />
 $$<br />
 \rho =\frac{\sum_{x \in \tilde{D}}w_{\mathbf{x}}}{\sum_{x \in D}w_{\mathbf{x}}}<br />
 $$</p>
@@ -237,7 +237,7 @@ $$</p>
 <p>$$<br />
 \tilde{r_{v}}==\frac{\sum_{x \in \tilde{D^{v}}}w_{\mathbf{x}}}{\sum_{x \in \tilde{D}}w_{\mathbf{x}}}\ \ (v=1,2...,\left | V \right |)<br />
 $$</p>
-<p>直观的看，对属性$a$，$\rho$表示无缺失值样本所占的比例，$\tilde{p_{k}}$表示无缺失值样本中第k类所占的比例，$\tilde{r_{v}}$表示无缺失值样本中在属性$a$上取值$a^{v}$的比例，显然，$\sum <em k="k">{k=1}^{\mathcal{Y}}\tilde{p</em>}=1,\sum <em v="v">{v=1}^{V}\tilde{r</em>}=1$.</p>
+<p>直观的看，对属性$a$，$\rho$表示无缺失值样本所占的比例，$\tilde{p_{k}}$表示无缺失值样本中第k类所占的比例，$\tilde{r_{v}}$表示无缺失值样本中在属性$a$上取值$a^{v}$的比例，显然，$\sum_{k=1}^{\mathcal{Y}}\tilde{p_{k}}=1,\sum_{v=1}^{V}\tilde{r_{v}}=1$.</p>
 <p>​   因此，我们可以将信息增益的计算式推广为<br />
 $$<br />
 \begin{align<em>}<br />
@@ -262,21 +262,19 @@ $$<br />
 <p>​   选择最优切分变量$j$和切分点$s$，求解</p>
 <ol>
 <li>$$<br />
-   \mathop{\min}<em c__1="c_{1">{j,s}\left [ \mathop{\min}</em>}\sum_{x_{i}\in R_{1}(j,s)}(y_{i}-c_{1})^{2}+\mathop{\min}<em 2="2">{c</em>}\sum_{x_{i}\in R_{2}(j,s)}(y_{i}-c_{2})^{2}\right ]<br />
+   \mathop{\min}_{j,s}\left [ \mathop{\min}_{c_{1}}\sum_{x_{i}\in R_{1}(j,s)}(y_{i}-c_{1})^{2}+\mathop{\min}_{c_{2}}\sum_{x_{i}\in R_{2}(j,s)}(y_{i}-c_{2})^{2}\right ]<br />
    $$</li>
 </ol>
 <p>遍历变量$j$，对固定的切分变量$j$扫描切分点$s$，选择使式(20)达到最大值的对$(j,s$)</p>
 <p>(2) 用选定的对$(j,s$)划分区域并决定相应的输出值：<br />
-$$<br />
-R_{1}(j,s)=\left {  x|x^{(j)}\leqslant s\right },R_{2}(j,s)=\left {  x|x^{(j)}&gt; s\right }<br />
-$$</p>
+<img src="/wiki/static/images/adaboost/aaa.png" alt="shu"/></p>
 <p>$$<br />
-\hat{{c}}<em 1="1">{1}=\frac{1}{N</em>}\sum_{x_{i}\in R_{1}(j,s)}y_{i},\hat{{c}}<em 2="2">{2}=\frac{1}{N</em>}\sum_{x_{i}\in R_{2}(j,s)}y_{i}<br />
+\hat{{c}}_{1}=\frac{1}{N_{1}}\sum_{x_{i}\in R_{1}(j,s)}y_{i},\hat{{c}}_{2}=\frac{1}{N_{2}}\sum_{x_{i}\in R_{2}(j,s)}y_{i}<br />
 $$</p>
 <p>(3) 继续对两个子区域调用步骤（1）（2），直至满足停止条件</p>
 <p>(4) 将输入空间划分为M个区域$R_{1},R_{2},..,R_{M}$，生成决策树：<br />
 $$<br />
-f(x)=\sum_{m=1}^{M}\hat{{c}}<em m="m">{m}I(x\in R</em>)<br />
+f(x)=\sum_{m=1}^{M}\hat{{c}}_{m}I(x\in R_{m})<br />
 $$</p>
 <hr />
 <h3 id="cart_2">CART 分类树的生成</h3>

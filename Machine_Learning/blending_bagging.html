@@ -70,7 +70,7 @@
 <p>将刚刚举的例子的各种方法用数学化的语言和机器学习符号归纳表示出来，其中$G(x)$表示最终选择的模型。</p>
 <p>第一种方法对应的模型： <br />
 $$<br />
-G(x)=g_{t_{<em>}}(x) \     \    with \ t_</em>  =\ \mathop{\arg\min}<em val="val">{t \in 1,2...,T}E</em>(g_{t}^{-})<br />
+G(x)=g_{t_{*}}(x) \     \    with \ t_*  =\ \mathop{\arg\min}_{t \in 1,2...,T}E_{val}(g_{t}^{-})<br />
 $$<br />
 注意这里是通过验证集来选择最佳模型，不能使用$E_{in}(g_{t}^{})$来代替$E_{val}(g_{t}^{-})$。经过Validation，选择最小的$E_{val}(g_{t}^{-})$，保证$E_{out}$最小，从而将对应的模型作为最佳的选择</p>
 <p>第二种方法对应的模型： <br />
@@ -79,11 +79,11 @@ G(x)=sign(\sum_{t=1}^{T}1 \cdot g_t(x))<br />
 $$<br />
 第三种方法对应的模型<br />
 $$<br />
-G(x)=sign(\sum_{t=1}^{T}\alpha <em t="1">t\cdot g_t(x)),\alpha _t\geqslant 0<br />
+G(x)=sign(\sum_{t=1}^{T}\alpha_t\cdot g_t(x)),\alpha_t\geqslant 0<br />
 $$<br />
 第四种方法对应的模型<br />
 $$<br />
-G(x)=sign(\sum</em>^{T}q_t(x)\cdot g_t(x)),q_t(x)\geqslant 0<br />
+G(x)=sign(\sum_{t=1}^{T}q_t(x)\cdot g_t(x)),q_t(x)\geqslant 0<br />
 $$<br />
 但是第一种方法只是从众多可能的hypothesis中选择最好的模型，并不能发挥集体的智慧。而Aggregation的思想是博采众长，将可能的hypothesis优势集合起来，将集体智慧融合起来，使预测模型达到更好的效果。</p>
 <p>下面先来看一个例子，通过这个例子说明为什么Aggregation能work得更好。</p>
@@ -121,19 +121,19 @@ uniform blending for regression对应两种情况：</p>
 <p>刚才我们提到了uniform blending for regression中，计算$g_t$的平均值可能比单一的$g_t$更稳定，更准确。下面进行简单的推导和证明，对于某一个单一的样本点$\boldsymbol{x}$，以平方误差为例，<br />
 $$<br />
 \begin{align<em>}<br />
-avg((g_t(\boldsymbol{x})-f(\boldsymbol{x}))^2)  &amp;=avg (g_t^2-2g_tf+f^2)\<br />
- &amp;=avg (g_t^2)-2Gf+f^2\<br />
- &amp;=avg (g_t^2)-G^2+(G-f)^2\<br />
- &amp;=avg (g_t^2)-2G^2+G^2+(G-f)^2\<br />
- &amp;=avg (g_t^2)-2g_tG^2+G^2+(G-f)^2\<br />
- &amp;=avg (g_t-G)^2+(G-f)^2\<br />
+avg((g_t(\boldsymbol{x})-f(\boldsymbol{x}))^2)  &amp;=avg (g_t^2-2g_tf+f^2)\\<br />
+ &amp;=avg (g_t^2)-2Gf+f^2\\<br />
+ &amp;=avg (g_t^2)-G^2+(G-f)^2\\<br />
+ &amp;=avg (g_t^2)-2G^2+G^2+(G-f)^2\\<br />
+ &amp;=avg (g_t^2)-2g_tG^2+G^2+(G-f)^2\\<br />
+ &amp;=avg (g_t-G)^2+(G-f)^2\\<br />
 \end{align</em>}<br />
 $$<br />
 推导过程中注意$G(t)=avg(g_t)$，即对所有的$g_t$做$avg$</p>
 <p>刚才是对单一的$\boldsymbol{x}$进行证明，如果从期望角度，对整个$\boldsymbol{x}$分布进行上述公式的整理，得到：<br />
 $$<br />
 \begin{align<em>}<br />
-avg(E_{out}(g_t))&amp;=avg(\boldsymbol{\varepsilon}  (g_t-G)^2)+E_{out}(G)\<br />
+avg(E_{out}(g_t))&amp;=avg(\boldsymbol{\varepsilon}  (g_t-G)^2)+E_{out}(G)\\<br />
 &amp; \geqslant E_{out}(G)<br />
 \end{align</em>}<br />
 $$<br />
@@ -165,24 +165,24 @@ $$<br />
 <h3 id="linear-blending">linear blending</h3>
 <p>上一部分讲的是uniform blending，即每个$g_t$所占的权重都是1，求平均的思想。下面我们将介绍linear blending，每个$g_t$赋予的权重$\alpha_t$并不相同，其中$\alpha_t \geq 0$。我们最终得到的预测结果等于所有$g_t$的线性组合。</p>
 <p>$$<br />
-G(x)=sign(\sum_{t=1}^{T}\alpha <em in="in">t\cdot g_t(x)),\alpha _t\geqslant 0<br />
+G(x)=sign(\sum_{t=1}^{T}\alpha_t\cdot g_t(x)),\alpha_t\geqslant 0<br />
 $$<br />
-如何确定$α_t$的值，方法是利用误差最小化的思想，找出最佳的$α_t$，使$E</em>(α)$取最小值。例如对于linear blending for regression，$E_{in}(α)$可以写成<br />
+如何确定$α_t$的值，方法是利用误差最小化的思想，找出最佳的$α_t$，使$E_{in}(α)$取最小值。例如对于linear blending for regression，$E_{in}(α)$可以写成<br />
 $$<br />
-\mathop{\min}<em n="1">{\alpha\geq 0} \frac{1}{N}\sum</em>^{N}(y_n-\sum_{t=1}^{T}\alpha_tg_t(\boldsymbol x_n))^2<br />
+\mathop{\min}_{\alpha\geq 0} \frac{1}{N}\sum_{n=1}^{N}(y_n-\sum_{t=1}^{T}\alpha_tg_t(\boldsymbol x_n))^2<br />
 $$<br />
 下图左边形式，其中$α_t$是带求解参数，$g_t(\boldsymbol x_n)$是每个g得到的预测值。这种形式很类似于经过特征转换的linear regression模型<br />
 $$<br />
-\mathop{\min}<em n="1">{\bold w_i} \frac{1}{N}\sum</em>^{N}(y_n-\sum_{t=1}^{T}\bold w_i\phi _i(\boldsymbol x_n))^2<br />
+\mathop{\min}_{\boldsymbol w_i} \frac{1}{N}\sum_{n=1}^{N}(y_n-\sum_{t=1}^{T}\boldsymbol w_i\phi _i(\boldsymbol x_n))^2<br />
 $$<br />
-唯一不同的就是linear blending for regression中$α_t≥0$，而linear regression中${\bold w_i}$没有限制。</p>
+唯一不同的就是linear blending for regression中$α_t≥0$，而linear regression中${\boldsymbol w_i}$没有限制。</p>
 <p>$α_t≥0$这个条件是否一定要成立呢？如果$α_t&lt;0$，会带来什么后果呢？其实$α_t&lt;0$并不会影响分类效果，只需要将正类看成负类，负类当成正类即可。例如分类问题，判断该点是正类对应的$α_t&lt;0$，则它就表示该点是负类，且对应的$-α_t&gt;0$。如果我们说这个样本是正类的概率是-99%，意思也就是说该样本是负类的概率是99%。$α_t≥0$和$α_t&lt;0$的效果是一致的。所以，我们可以把$α_t≥0$这个条件舍去，这样linear blending就可以使用常规方法求解。</p>
 <p>在实际中，不同的$g_t$通常是来自不同的model通过各自求最小化$E_{in}$得到的，即<br />
 $$<br />
-g_1\in\mathcal{H_1},g_2\in\mathcal{H}<em in="in">2,...,g_T\in\mathcal{H}_T\  \<br />
-by\ minimum\ E</em><br />
+g_1\in\mathcal{H_1},g_2\in\mathcal{H}_2,...,g_T\in\mathcal{H}_T\  \\<br />
+by\ minimum\ E_{in}<br />
 $$<br />
-那么如果我们通过最小化$E_{in}$来从$g_1,g_2,...,g_T$中选择一个表现最好的，我们会付出$d_{vc}(\bigcup_{t=1}^{T}\mathcal{H}<em in="in">t)$的模型复杂度的代价，这个代价很大；如果我们将$g_1,g_2,...,g_T$做linear blending，并通过最小化$E</em>$来确定系数$α_t$的话，那么我们付出的模型复杂度代价比$d_{vc}(\bigcup_{t=1}^{T}\mathcal{H}<em val="val">t)$还要大，因此，在模型选择的时候要用单独的验证集validation上的表现$E</em>$来代替$E_{in}$，具体的做法是：</p>
+那么如果我们通过最小化$E_{in}$来从$g_1,g_2,...,g_T$中选择一个表现最好的，我们会付出$d_{vc}(\bigcup_{t=1}^{T}\mathcal{H}_t)$的模型复杂度的代价，这个代价很大；如果我们将$g_1,g_2,...,g_T$做linear blending，并通过最小化$E_{in}$来确定系数$α_t$的话，那么我们付出的模型复杂度代价比$d_{vc}(\bigcup_{t=1}^{T}\mathcal{H}_t)$还要大，因此，在模型选择的时候要用单独的验证集validation上的表现$E_{val}$来代替$E_{in}$，具体的做法是：</p>
 <hr />
 <p>将数据集$D$分为训练集$D_{trian}$和验证集$D_{validation}$</p>
 <p>从$D_{trian}$中得到$g_1^-,g_2^-,...,g_T^-$，有了这些$g^-$之后，通过这些$g^-$将$D_{validation}$中的数据点$({\boldsymbol x_n},y_n)$转化到z空间中$({\boldsymbol z_n}=\boldsymbol\phi^-(\boldsymbol x_n),y_n)$，其中$\boldsymbol\phi^-(\boldsymbol x)=(g_1^-(\boldsymbol x),g_2^-(\boldsymbol x),...,g_T^-(\boldsymbol x))$</p>

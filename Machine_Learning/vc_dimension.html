@@ -74,7 +74,9 @@ $$<br />
 <p>注意在上面推导中，我们是针对某一个特定的假设$h(x)$。在我们的假设空间H中，往往有很多个假设函数(甚至于无穷多个)，这里我们先假定$\mathcal{H}$中有M个假设函数。</p>
 <p>那么对于整个假设空间$\mathcal{H}$，也就是这M个假设函数，可以推导出下面不等式：<br />
 $$<br />
-P(|E_{in}(h_1)-E_{out}(h_1)|&gt;\epsilon \cup |E_{in}(h_2)-E_{out}(h_2)|&gt;\epsilon  \cdots \cup |E_{in}(h_m)-E_{out}(h_m)|&gt;\epsilon)\\leqslant P(|E_{in}(h_1)-E_{out}(h_1)|&gt;\epsilon)+P(|E_{in}(h_2)-E_{out}(h_2)|&gt;\epsilon)+\cdots +P(|E_{in}(h_m)-E_{out}(h_m)|&gt;\epsilon)\\leqslant2Mexp(-2\epsilon ^2N)<br />
+P(|E_{in}(h_1)-E_{out}(h_1)|&gt;\epsilon \cup |E_{in}(h_2)-E_{out}(h_2)|&gt;\epsilon  \cdots \cup |E_{in}(h_m)-E_{out}(h_m)|&gt;\epsilon)\\<br />
+\leq  P(|E_{in}(h_1)-E_{out}(h_1)|&gt;\epsilon)+P(|E_{in}(h_2)-E_{out}(h_2)|&gt;\epsilon)+\cdots +P(|E_{in}(h_m)-E_{out}(h_m)|&gt;\epsilon)\\<br />
+\leq 2Mexp(-2\epsilon ^2N)<br />
 $$<br />
 上面式子的含义是：在假设空间$\mathcal{H}$中，设定一个较小的值$\epsilon$，任意一个假设h，它的$E_{in}(h)$与$E_{out}(h)$的差由该值所约束住。注意这个bound值与 “样本数N和假设数M” 密切相关。</p>
 <h3 id="_1">机器学习的两个核心条件</h3>
@@ -130,11 +132,11 @@ $$</p>
 </tr>
 <tr>
 <td align="left">Convex sets</td>
-<td n="n">$2^</td>
+<td>$2^{n}$</td>
 </tr>
 <tr>
 <td align="left">2D perceptrons</td>
-<td n="n">&lt;$2^</td>
+<td>&lt;$2^{n}$</td>
 </tr>
 </tbody>
 </table>
@@ -146,7 +148,7 @@ $$</p>
 <p>Shatter的概念：当$\mathcal{H}$作用于有N个inputs的$D$时，产生的dichotomies数量等于这N个点的排列组合数$2^N$时，我们就称这N个inputs被$\mathcal{H}$给shatter掉了。</p>
 <p>要注意到 shatter 的原意是“打碎”，在此指“N个点的所有(碎片般的)可能情形都被$\mathcal{H}$产生了”。所以$m_\mathcal{H}(N)=2^N$的情形是即为“shatter”。</p>
 <p>对于给定的成长函数$m_\mathcal{H}(N)$，从N=1出发，N慢慢变大，当增大到k时，出现$m_\mathcal{H}(N)&lt;2^N$的情形，则我们说k是该成长函数的<strong>break point</strong>。对于任何N &gt; k个inputs而言，$\mathcal{H}$都没有办法再shatter他们了。</p>
-<p>举例来说，对于上面的positive ray的例子，因为$m_\mathcal{H}(N)=N+1$，当N=2时，$m_\mathcal{H}(N)&lt;2^2$， 所以它的break point就是2。</p>
+<p>举例来说，对于上面的positive ray的例子，因为$m_\mathcal{H}(N)=N+1$，当N=2时，$m_\mathcal{H}(N)&lt;2^2$， 所以它的break point就是2。</p>
 <h3 id="vc-bound">VC bound</h3>
 <p>有些$\mathcal{H}$的成长函数很容易找到，比如前面说到的Positive Rays、Positive Intervals以及Convex Sets；有些$\mathcal{H}$则没有那么容易，比如2D perceptrons，我们无法直接看出它的成长函数是什么，那么我们对于这样的$\mathcal{H}$就没辙了吗？也不完全是，至少我们手上还掌握着它的break point，能不能用这个break point干点事呢？如果没办法得到成长函数，能得到成长函数的upper bound也是不错的。</p>
 <p>对于存在break point k的成长函数而言，有：<br />
@@ -180,7 +182,8 @@ $$<br />
 <p>一个实践规律：VC 维与假设参数w 的自由变量数目大约相等。d_VC = #free parameters。</p>
 <p>模型越复杂，VC维大，$E_{out}(g)$可能距离$E_{in}(g)$越远。如下图所示，随着d_vc的上升，$E_{in}(g)$不断降低，而模型复杂度不断上升。</p>
 <p><img src="/wiki/static/images/adaboost/vc_power2.png" alt="joey"/></p>
-<p>模型较复杂时(d_vc 较大)，需要更多的训练数据。 理论上，数据规模N 约等于 10000*d_vc（称为采样复杂性，sample complexity)。然而，实际经验是，只需要 N = 10*d_vc。 造成理论值与实际值之差如此之大的最大原因是，VC Bound 过于宽松了，我们得到的是一个比实际大得多的上界。</p>
+<p>模型较复杂时(d_vc 较大)，需要更多的训练数据。 理论上，数据规模N 约等于10000<em>$d_{vc}$（称为采样复杂性，sample complexity)。然而，实际经验是，只需要 <br />
+N = 10</em>$d_{vc}$。 造成理论值与实际值之差如此之大的最大原因是，VC Bound 过于宽松了，我们得到的是一个比实际大得多的上界。</p>
 <p>注意在前述讨论中，理想的目标函数为f(x)，error measure用的是“0–1 loss”。如果在unknown target上引入噪声(+noise)，或者用不同的error measure方法，VC theory还有效吗？这里只给出结论，VC theory对于绝大部分假设空间(or 加入噪声)和error度量方法，都是有效的。</p>
 <p><strong>除此外，我们为了避免overfit，一般都会加正则项。那加了正则项后，新的假设空间会得到一些限制，此时新假设空间的VC维将变小，也就是同样训练数据条件下，Ein更有可能等于Eout，所以泛化能力更强。这里从VC维的角度解释了正则项的作用。</strong></p>
 <h2 id="_3">参考</h2>
