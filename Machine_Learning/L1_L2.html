@@ -1,0 +1,141 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <link rel="Stylesheet" type="text/css" href="/wiki/static/css/style.css">
+    <link rel="Stylesheet" type="text/css" href="/wiki/static/css/tango.css">
+    <link rel="shortcut icon" href="/wiki/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/wiki/favicon.ico" type="image/x-icon">
+    <title>L1 L2范数 - zhanghongwei's personal knowledge wiki</title>
+    <meta name="keywords" content="technology, machine learning, data mining"/>
+    <meta name="description" content="A wiki website of zhanghongwei when I learned new knowledgy and technics."/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width" />
+
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+          tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+        });
+        </script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-78529611-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+</head>
+
+<body>
+<div id="container">
+    
+<div id="header">
+  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Machine_Learning">Machine_Learning</a>&nbsp;»&nbsp;L1 L2范数</div>
+</div>
+<div class="clearfix"></div>
+<div id="title">L1 L2范数</div>
+<div id="content">
+  <div class="toc"><span class="toctitle">Table of Contents</span><ul>
+<li><a href="#l1">L1范数为什么可以获得稀疏解</a></li>
+<li><a href="#l2">L2范数为什么可以防止过拟合</a></li>
+<li><a href="#_1">参考</a></li>
+</ul>
+</div>
+<h2 id="l1">L1范数为什么可以获得稀疏解</h2>
+<p>L1正则化即在原始的代价函数后面加上一个L1正则化项：<br />
+$$<br />
+C=C_0+\frac{\lambda }{n}\sum \left | w_i \right |<br />
+$$<br />
+对新的代价函数求梯度，<br />
+$$<br />
+\frac{\partial C}{\partial w_i}=\frac{\partial C_0}{\partial w_i}+\frac{\lambda }{n}sgn(w_i)<br />
+$$<br />
+其中，<br />
+$$<br />
+sgn(w_i)=\begin{matrix}<br />
+1, &amp; if &amp;w_i&gt;0 \\<br />
+ -1,&amp;if  &amp; w_i&lt;0<br />
+\end{matrix}<br />
+$$<br />
+权重$w_i$的更新规则为<br />
+$$<br />
+ w_i^{'} \rightarrow w_i-\frac{\eta \lambda }{n}sgn(w_i)-\eta \frac{C_0}{w_i}<br />
+$$<br />
+角度1：新的更新规则比原始的更新规则多出了$-\frac{\eta \lambda }{n}sgn(w_i)$这一项，当$w_i$大于0时，更新后的$w^{'}_i$后变小；当$w_i$小于0时，更新后的$w^{'}_i$后变大。因此效果就是让$w_i$往0靠。<br />
+角度2：当$w_i$从负半轴趋向于0时，$sgn(w_i)&lt;0$，所以$\frac{\partial C}{\partial w_i}=\frac{\partial C_0}{\partial w_i}-\frac{\lambda }{n}sgn(w_i)$，因此只要有$\frac{\lambda }{n}&gt;\frac{\partial C_0}{\partial w_i}$，就有$\frac{\partial C}{\partial w_i}$小于0;当$w_i$从正半轴趋向于0时，$sgn(w_i)&gt;0$，所以$\frac{\partial C}{\partial w_i}=\frac{\partial C_0}{\partial w_i}+\frac{\lambda }{n}sgn(w_i)$，因此只要有$\frac{\lambda }{n}&gt;-\frac{\partial C_0}{\partial w_i}$，就有$\frac{\partial C}{\partial w_i}$小于0。因此只要保证$\frac{\lambda }{n}$大于原始损失函数在0点处的导数$\frac{\lambda }{n}&gt;|\frac{\partial C_0}{\partial w_i}|$，那么新的损失函数在0点左右的导数就是异号的，即$w_i=0$是极小值点。<br />
+由于当$w=0$时，$|w|$是不可导的，实际编程时，可以设$sgn(0)=0,sgn(w&gt;0)=1,sgn(w&lt;0)=-1$</p>
+<h2 id="l2">L2范数为什么可以防止过拟合</h2>
+<p>L2正则化就是在代价函数后面再加上w的L2范数：<br />
+$$<br />
+C=C_0+\frac{\lambda }{2n}\sum \left | w_i^2 \right |<br />
+$$<br />
+权重$w_i$的更新规则为<br />
+$$<br />
+\begin{align}<br />
+ w_i^{'} \rightarrow &amp;w_i-\frac{\eta \lambda }{n}w_i-\eta\frac{C_0}{w_i} \\<br />
+ &amp;= (1-\frac{\eta \lambda }{n})w_i-\eta\frac{C_0}{w_i}<br />
+\end{align}<br />
+$$<br />
+在不使用L2正则化时，求导结果中w前系数为1，现在w前面系数为 1−ηλ/n ，因为η、λ、n都是正的，所以 1−ηλ/n小于1，它的效果是让$w_i$变为原来的 1−ηλ/n，那么，虽然权值不断变小，但是因为每次都等于上一次的1−ηλ/n，所以很快会收敛到较小的值但不为0。这也就是权重衰减（weight decay）的由来。当然考虑到后面的导数项，w最终的值可能增大也可能减小。<br />
+为什么w“变小”可以防止overfitting？<br />
+（引自知乎）：<br />
+过拟合的时候，拟合函数的系数往往非常大，为什么？如下图所示，过拟合，就是拟合函数需要顾忌每一个点，最终形成的拟合函数波动很大。在某些很小的区间里，函数值的变化很剧烈。这就意味着函数在某些小区间里的导数值（绝对值）非常大，即系数足够大。<br />
+<img src="/wiki/static/images/pca/l1.png" alt="joey"/></p>
+<h2 id="_1">参考</h2>
+<p><a href="https://www.jianshu.com/p/475d2c3197d2">L1,L2,L0区别，为什么可以防止过拟合</a><br />
+<a href="https://www.cnblogs.com/alexanderkun/p/6922428.html">正则化为什么能防止过拟合</a><br />
+<a href="https://www.zhihu.com/question/37096933/answer/148843450">l1 相比于 l2 为什么容易获得稀疏解？</a></p>
+</div>
+<div id="content-footer">created in <span class="create-date date"> 2018-08-28 00:00 </span></div>
+<div id="comments"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script type="text/javascript">
+const gitment = new Gitment({
+  id: '<%= page.date %>',
+  title: 'L1 L2范数',
+  owner: '2kkkkk',
+  repo: 'wiki',
+  oauth: {
+    client_id: '3e94faa97d38ef7da223',
+    client_secret: '20685c8a4da0dfad1c1ae91970b7805e260c5abb',
+  },
+  // ...
+  // For more available options, check out the documentation below
+})
+gitment.render('comments')
+// or
+// gitment.render(document.getElementById('comments'))
+// or
+// document.body.appendChild(gitment.render())
+</script>
+
+</div>
+<div id="footer">
+            <span>
+                Copyright © 2018 zhanghongwei.
+                Powered by <a href="http://simiki.org/" target="_blank">Simiki</a>.
+                Fork me in <a href="https://github.com/2kkkkk/wiki" target="_blank"> github </a>.
+            </span>
+</div>
+
+
+<!--百度统计-->
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?90e1dcdd1938573c19f9ff6521188e91";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+</body>
+</html>
