@@ -1,0 +1,128 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <link rel="Stylesheet" type="text/css" href="/wiki/static/css/style.css">
+    <link rel="Stylesheet" type="text/css" href="/wiki/static/css/tango.css">
+    <link rel="shortcut icon" href="/wiki/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/wiki/favicon.ico" type="image/x-icon">
+    <title>特征工程 - zhanghongwei's personal knowledge wiki</title>
+    <meta name="keywords" content="technology, machine learning, data mining"/>
+    <meta name="description" content="A wiki website of zhanghongwei when I learned new knowledgy and technics."/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width" />
+
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+          tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+        });
+        </script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-78529611-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+</head>
+
+<body>
+<div id="container">
+    
+<div id="header">
+  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Machine_Learning">Machine_Learning</a>&nbsp;»&nbsp;特征工程</div>
+</div>
+<div class="clearfix"></div>
+<div id="title">特征工程</div>
+<div id="content">
+  <div class="toc"><span class="toctitle">Table of Contents</span><ul>
+<li><a href="#_1">数据预处理</a><ul>
+<li><a href="#_2">无量纲化</a></li>
+<li><a href="#_3">连续特征离散化</a></li>
+<li><a href="#_4">类别特征独热编码</a></li>
+<li><a href="#_5">缺失值填充</a></li>
+</ul>
+</li>
+<li><a href="#_6">特征选择</a><ul>
+<li><a href="#_7">方差选择法</a></li>
+<li><a href="#_8">相关系数法</a></li>
+<li><a href="#_9">卡方检验</a></li>
+<li><a href="#_10">互信息法</a></li>
+</ul>
+</li>
+<li><a href="#_11">参考</a></li>
+</ul>
+</div>
+<h2 id="_1">数据预处理</h2>
+<h3 id="_2">无量纲化</h3>
+<p>无量纲化使不同规格的数据转换到同一规格。常见的无量纲化方法有标准化和区间缩放法。标准化的前提是特征值服从正态分布，标准化后，其转换成标准正态分布。区间缩放法利用了边界值信息，将特征的取值区间缩放到某个特点的范围，例如[0, 1]等。</p>
+<h3 id="_3">连续特征离散化</h3>
+<h3 id="_4">类别特征独热编码</h3>
+<h3 id="_5">缺失值填充</h3>
+<h2 id="_6">特征选择</h2>
+<h3 id="_7">方差选择法</h3>
+<p>使用方差选择法，先要计算各个特征的方差，然后根据阈值，选择方差大于阈值的特征。</p>
+<h3 id="_8">相关系数法</h3>
+<p>皮尔逊相关系数可以看成归一化的协方差矩阵，取值范围在[-1,1]，因此可以计算各个特征对目标值的相关系数来选择最线性相关的特征（协方差反映了两个变量线性相关性）</p>
+<h3 id="_9">卡方检验</h3>
+<p>经典的卡方检验是检验定性自变量对定性因变量的相关性。假设自变量有N种取值，因变量有M种取值，考虑自变量等于i且因变量等于j的样本频数的观察值与期望的差距。<br />
+通俗来说，如果“篮球”和“体育”无关，那么“篮球”在“体育”文章中出现的概率应该与“篮球”在所有文章中出现的概率相等。</p>
+<h3 id="_10">互信息法</h3>
+<p>经典的互信息也是评价定性自变量对定性因变量的相关性的，互信息计算公式如下：<br />
+<img src="/wiki/static/images/pca/f1.png" alt="joey"/></p>
+<h2 id="_11">参考</h2>
+<p><a href="https://www.zhihu.com/question/29316149">知乎-特征工程是什么？</a></p>
+</div>
+<div id="content-footer">created in <span class="create-date date"> 2018-08-29 00:00 </span></div>
+<div id="comments"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script type="text/javascript">
+const gitment = new Gitment({
+  id: '<%= page.date %>',
+  title: '特征工程',
+  owner: '2kkkkk',
+  repo: 'wiki',
+  oauth: {
+    client_id: '3e94faa97d38ef7da223',
+    client_secret: '20685c8a4da0dfad1c1ae91970b7805e260c5abb',
+  },
+  // ...
+  // For more available options, check out the documentation below
+})
+gitment.render('comments')
+// or
+// gitment.render(document.getElementById('comments'))
+// or
+// document.body.appendChild(gitment.render())
+</script>
+
+</div>
+<div id="footer">
+            <span>
+                Copyright © 2018 zhanghongwei.
+                Powered by <a href="http://simiki.org/" target="_blank">Simiki</a>.
+                Fork me in <a href="https://github.com/2kkkkk/wiki" target="_blank"> github </a>.
+            </span>
+</div>
+
+
+<!--百度统计-->
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?90e1dcdd1938573c19f9ff6521188e91";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+</body>
+</html>

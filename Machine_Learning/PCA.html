@@ -1,0 +1,225 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <link rel="Stylesheet" type="text/css" href="/wiki/static/css/style.css">
+    <link rel="Stylesheet" type="text/css" href="/wiki/static/css/tango.css">
+    <link rel="shortcut icon" href="/wiki/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/wiki/favicon.ico" type="image/x-icon">
+    <title>PCA - zhanghongwei's personal knowledge wiki</title>
+    <meta name="keywords" content="technology, machine learning, data mining"/>
+    <meta name="description" content="A wiki website of zhanghongwei when I learned new knowledgy and technics."/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width" />
+
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+          tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+        });
+        </script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-78529611-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+</head>
+
+<body>
+<div id="container">
+    
+<div id="header">
+  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Machine_Learning">Machine_Learning</a>&nbsp;»&nbsp;PCA</div>
+</div>
+<div class="clearfix"></div>
+<div id="title">PCA</div>
+<div id="content">
+  <div class="toc"><span class="toctitle">Table of Contents</span><ul>
+<li><a href="#_1">优化目标</a><ul>
+<li><a href="#_2">内积与投影</a></li>
+<li><a href="#_3">方差与协方差</a></li>
+</ul>
+</li>
+<li><a href="#_4">计算方案</a><ul>
+<li><a href="#_5">协方差矩阵</a></li>
+<li><a href="#_6">协方差矩阵对角化</a></li>
+</ul>
+</li>
+<li><a href="#pca">PCA算法</a></li>
+<li><a href="#_7">进一步讨论</a></li>
+<li><a href="#_8">参考</a></li>
+<li><a href="#_9">关于实对称矩阵的一些性质</a></li>
+</ul>
+</div>
+<h2 id="_1">优化目标</h2>
+<p>假设数据集中有m个样本，每个样本有n个特征，那么可以构建一个$n\times m$阶的矩阵$X$，若找到一个$r\times n$阶的矩阵$P$，令$Y=P\times X$，则$Y$是一个$r\times m$阶的矩阵，若r&lt;n，就达到了降维的目的。<br />
+从矩阵乘法的角度来解释一下，矩阵$P$的阶数是$r\times n$，这个矩阵的意义是原始空间有n个基向量（每个基向量都由一个n维的向量表示），经过$P$的变换后，每个基向量都由一个r维的向量表示，即将n维空间的向量变换到r维空间中，实现了维度变换。<br />
+那么如何得到最优的$P$呢？？（即如何选择这r个基呢？）</p>
+<h3 id="_2">内积与投影</h3>
+<p><img src="/wiki/static/images/pca/x.png" alt="joey"/><br />
+以二维向量为例，设向量B的模为1，则<strong>A与B的内积值等于A向B所在直线投影的矢量长度</strong> 。<br />
+回到n维空间中，现在我们有m个n维向量，我们要做的是在n维空间中找到r个基向量，将这m个向量分别投影到这r个基向量上，然后用投影值表示原始记录。<br />
+如何选择这r个基向量的方向才能尽量保留更多的原始信息呢？一种直观的看法是：希望投影后的投影值尽可能分散。</p>
+<h3 id="_3">方差与协方差</h3>
+<p>数学上可以用方差来表示数据的分散程度，一个字段x的方差表示为<br />
+$$<br />
+Var(x)=\frac{1}{m}\sum_{i=1}^{m}(x_i-\mu )^2<br />
+$$<br />
+假设已经将每个字段均值都化为0了，那么方差变为<br />
+$$<br />
+Var(x)=\frac{1}{m}\sum_{i=1}^{m}x_i ^2<br />
+$$<br />
+于是上面的问题转化为：寻找r个n维基，使得所有数据变换为这r个基上的坐标表示后，方差值最大。<br />
+但是问题来了，对于高维空间，首先我们找到一个方向使得投影后方差最大，这样就完成了第一个方向的选择，继而我们选择第二个投影方向。如果我们还是单纯只选择方差最大的方向，很明显，这个方向与第一个方向应该是“几乎重合的”，显然这样的维度是没有用的。因此，应该有其他约束条件。从直观上来说，让两个字段尽可能表示更多的原始信息，我们是不希望它们之间存在（线性）相关性的，因为相关性意味着两个字段还是完全独立，必然存在重复表示的信息。<br />
+数学上用两个变量的协方差表示其线性相关性，由于已经让每个字段的均值为0，则协方差为：<br />
+$$<br />
+Cov(a,b)=\frac{1}{m}\sum_{i=1}^{m}a_ib_i<br />
+$$<br />
+<strong>至此，我们得到了降维问题的优化目标：将一组n维向量降为r维，其目标是选择r个单位(模为1)基，使得原始数据变换到这组基上后，各字段两两间协方差为0，字段的方差尽可能大。</strong></p>
+<h2 id="_4">计算方案</h2>
+<h3 id="_5">协方差矩阵</h3>
+<p>最终要达到的目的与字段内方差及字段间协方差有密切关系。仔细观察发现，二者均可以表示为内积的形式，而内积又与矩阵相乘有关，于是我们来了灵感：<br />
+设我们有m个n维记录，用矩阵形式表示为：<br />
+$$<br />
+X=\begin{bmatrix}<br />
+x_{11} &amp; x_{12} &amp; \cdots  &amp;x_{1m} \\ <br />
+\vdots  &amp; \vdots  &amp; \vdots  &amp; \vdots \\ <br />
+\vdots  &amp; \vdots  &amp; \vdots  &amp; \vdots\\ <br />
+ x_{n1}&amp;x_{n2} &amp;\cdots  &amp;x_{nm} <br />
+\end{bmatrix}<br />
+$$<br />
+然后我们用X乘以X的转置，并乘以系数1/m：<br />
+$$<br />
+\frac{1}{m}XX^T=\begin{bmatrix}<br />
+\frac{1}{m}\sum_{i=1}^{m}x_{1i}^2 &amp; \frac{1}{m}\sum_{i=1}^{m}x_{1i}x_{i2} &amp; \cdots &amp; \frac{1}{m}\sum_{i=1}^{m}x_{1i}x_{in}\\<br />
+\frac{1}{m}\sum_{i=1}^{m}x_{1i}x_{i2} &amp; \frac{1}{m}\sum_{i=1}^{m}x_{2i}^2 &amp; \cdots &amp; \vdots \\ <br />
+ \vdots&amp; \vdots &amp; \ddots  &amp;\vdots \\ <br />
+\frac{1}{m}\sum_{i=1}^{m}x_{1i}x_{in} &amp; \cdots  &amp; \cdots  &amp; \frac{1}{m}\sum_{i=1}^{m}x_{ni}^2<br />
+\end{bmatrix}<br />
+$$<br />
+奇迹出现了！这个矩阵是一个对称矩阵，对角线上的元素是每个字段的方差，而其它元素是两两字段之间的协方差，两者被统一到一个矩阵。</p>
+<h3 id="_6">协方差矩阵对角化</h3>
+<p>根据上述推导，我们发现要达到优化目前，等价于将协方差矩阵对角化：即除对角线外的其它元素化为0，并且在对角线上将元素按大小从上到下排列，这样我们就达到了优化目的。这样说可能还不是很明晰，我们进一步看下原矩阵与基变换后矩阵协方差矩阵的关系：<br />
+设原始数据矩阵X对应的协方差矩阵为C，而P是一组基按行组成的矩阵，设Y=PX，则Y为X对P做基变换后的数据。设Y的协方差矩阵为D，我们推导一下D与C的关系：<br />
+$$<br />
+\begin{align}<br />
+D &amp;= \frac{1}{m} YY^T\\<br />
+ &amp;= \frac{1}{m}(PX)(PX)^T\\<br />
+ &amp;=\frac{1}{m}PXX^TP^T\\<br />
+ &amp;=P(\frac{1}{m}XX^T)P^T\\<br />
+ &amp;=PCP^T\\<br />
+\end{align}<br />
+$$<br />
+现在事情很明白了！我们要找的P不是别的，而是能让原始协方差矩阵对角化的P。换句话说，优化目标变成了寻找一个矩阵P，满足$PCP^T$是一个对角矩阵，并且对角元素按从大到小依次排列，那么P的前K行就是要寻找的基，用P的前K行组成的矩阵乘以X就使得X从N维降到了K维并满足上述优化条件。<br />
+现在所有焦点都聚焦在了协方差矩阵对角化问题上，有时，我们真应该感谢数学家的先行，因为矩阵对角化在线性代数领域已经属于被玩烂了的东西，所以这在数学上根本不是问题。</p>
+<p>由上文知道，协方差矩阵C是一个是对称矩阵，在线性代数上，实对称矩阵有一系列非常好的性质：</p>
+<p>1）实对称矩阵不同特征值对应的特征向量必然正交。</p>
+<p>2）设特征值$\lambda$重数为r，则必然存在r个线性无关的特征向量对应于$\lambda$，因此可以将这r个特征向量单位正交化。</p>
+<p>由上面两条可知，一个n行n列的实对称矩阵一定可以找到n个单位正交特征向量，设这n个特征向量为$\boldsymbol{e_1},\boldsymbol{e_2},...,\boldsymbol{e_n}$，我们将其按列组成矩阵：<br />
+$$<br />
+E=(\boldsymbol{e_1},\boldsymbol{e_2},...,\boldsymbol{e_n})<br />
+$$<br />
+则对协方差矩阵C有如下结论:<br />
+$$<br />
+E^TCE=\Lambda =\begin{pmatrix}<br />
+ \lambda_1&amp;  &amp;  &amp; \\<br />
+ &amp; \lambda_2 &amp;  &amp; \\<br />
+ &amp;  &amp;  \ddots &amp; \\<br />
+ &amp;  &amp;  &amp; \lambda_n<br />
+\end{pmatrix}<br />
+$$<br />
+其中$\Lambda$为对角矩阵，其对角元素为各特征向量对应的特征值（可能有重复）。<br />
+到这里，我们已经找到了需要的矩阵P：<br />
+$$<br />
+P=E^T<br />
+$$<br />
+P是协方差矩阵的特征向量单位化后按行排列出的矩阵，其中每一行都是C的一个特征向量。如果设P按照$\Lambda$中特征值的从大到小，将特征向量从上到下排列，则用P的前K行组成的矩阵乘以原始数据矩阵X，就得到了我们需要的降维后的数据矩阵Y。</p>
+<h2 id="pca">PCA算法</h2>
+<p>总结一下PCA的算法步骤：</p>
+<p>设有m条n维数据。</p>
+<p>1）将原始数据按列组成n行m列矩阵X</p>
+<p>2）将X的每一行（代表一个属性字段）进行零均值化，即减去这一行的均值</p>
+<p>3）求出协方差矩阵$C=\frac{1}{m}XX^T$</p>
+<p>4）求出协方差矩阵的特征值及对应的特征向量</p>
+<p>5）将特征向量按对应特征值大小从上到下按行排列成矩阵，取前k行组成矩阵P</p>
+<p>6）$Y=PX$即为降维到k维后的数据</p>
+<h2 id="_7">进一步讨论</h2>
+<p>根据上面对PCA的数学原理的解释，我们可以了解到一些PCA的能力和限制。PCA本质上是将方差最大的方向作为主要特征，并且在各个正交方向上将数据“离相关”，也就是让它们在不同正交方向上没有相关性。</p>
+<p>因此，PCA也存在一些限制，例如它可以很好的解除线性相关，但是对于高阶相关性就没有办法了，对于存在高阶相关性的数据，可以考虑Kernel PCA，通过Kernel函数将非线性相关转为线性相关，关于这点就不展开讨论了。另外，PCA假设数据各主特征是分布在正交方向上，如果在非正交方向上存在几个方差较大的方向，PCA的效果就大打折扣了。</p>
+<p>最后需要说明的是，PCA是一种无参数技术，也就是说面对同样的数据，如果不考虑清洗，谁来做结果都一样，没有主观参数的介入，所以PCA便于通用实现，但是本身无法个性化的优化。</p>
+<h2 id="_8">参考</h2>
+<p><a href="http://www.360doc.com/content/13/1124/02/9482_331688889.shtml">PCA数学原理</a></p>
+<h2 id="_9">关于实对称矩阵的一些性质</h2>
+<ol>
+<li>
+<p>实对称矩阵A属于不同特征值的特征向量互相正交<br />
+证明：<br />
+$$<br />
+A\alpha _1=\lambda_1 \alpha _1(1),A\alpha _2=\lambda_2 \alpha _2(2)\\<br />
+(1)\rightarrow \alpha _2^TA\alpha _1=\alpha _2^T\lambda _1\alpha _1 \rightarrow \\<br />
+(A\alpha _2)^T\alpha _1=\alpha _2^T\lambda _1\alpha _1 \rightarrow\\<br />
+\lambda _2\alpha  _2^T\alpha _1=\lambda _1\alpha  _2^T\alpha _1\overset{\lambda _1\neq \lambda _1}{\rightarrow} \\<br />
+\alpha _1\  and \ \alpha _2 orthogonal<br />
+$$</p>
+</li>
+<li>
+<p>设A为实对称矩阵，则一定存在正交矩阵Q，使得$Q^TAQ=Q^{-1}AQ$为对角阵<br />
+证明：<br />
+从矩阵的特征基变换的角度来考虑（即如果能找到n个正交的特征向量，就可以将这n个正交向量作为新基，那么矩阵A在这个新基的描述下就是对角矩阵的形式）。已知矩阵A属于不同特征值的特征向量相互正交，属于同一特征值的不同特征向量线性无关，那么可以对这些线性无关的向量做施密特正交化，转化为相互正交的向量，由于施密特正交化是朝各个方向做投影的过程，因此并不改变特征向量的特征值。也就是说，可以找到矩阵A的n个正交的特征向量，因此可以将矩阵A对角化，其中Q就是矩阵A的各正交的特征向量组成的矩阵。</p>
+</li>
+</ol>
+</div>
+<div id="content-footer">created in <span class="create-date date"> 2018-08-21 00:00 </span></div>
+<div id="comments"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script type="text/javascript">
+const gitment = new Gitment({
+  id: '<%= page.date %>',
+  title: 'PCA',
+  owner: '2kkkkk',
+  repo: 'wiki',
+  oauth: {
+    client_id: '3e94faa97d38ef7da223',
+    client_secret: '20685c8a4da0dfad1c1ae91970b7805e260c5abb',
+  },
+  // ...
+  // For more available options, check out the documentation below
+})
+gitment.render('comments')
+// or
+// gitment.render(document.getElementById('comments'))
+// or
+// document.body.appendChild(gitment.render())
+</script>
+
+</div>
+<div id="footer">
+            <span>
+                Copyright © 2018 zhanghongwei.
+                Powered by <a href="http://simiki.org/" target="_blank">Simiki</a>.
+                Fork me in <a href="https://github.com/2kkkkk/wiki" target="_blank"> github </a>.
+            </span>
+</div>
+
+
+<!--百度统计-->
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?90e1dcdd1938573c19f9ff6521188e91";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+</body>
+</html>
