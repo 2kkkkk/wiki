@@ -1,5 +1,5 @@
 ---
-title: "关于这个wiki"
+title: "最大似然 最大后验 贝叶斯估计"
 layout: page
 date: 2018-08-16 00:00
 ---
