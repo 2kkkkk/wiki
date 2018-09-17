@@ -1,0 +1,126 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <link rel="Stylesheet" type="text/css" href="/wiki/static/css/style.css">
+    <link rel="Stylesheet" type="text/css" href="/wiki/static/css/tango.css">
+    <link rel="shortcut icon" href="/wiki/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/wiki/favicon.ico" type="image/x-icon">
+    <title>关于这个wiki - zhanghongwei's personal knowledge wiki</title>
+    <meta name="keywords" content="technology, machine learning, data mining"/>
+    <meta name="description" content="A wiki website of zhanghongwei when I learned new knowledgy and technics."/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width" />
+
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+          tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+        });
+        </script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-78529611-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+</head>
+
+<body>
+<div id="container">
+    
+<div id="header">
+  <div id="post-nav"><a href="/wiki/">Home</a>&nbsp;»&nbsp;<a href="/wiki/#Machine_Learning">Machine_Learning</a>&nbsp;»&nbsp;关于这个wiki</div>
+</div>
+<div class="clearfix"></div>
+<div id="title">关于这个wiki</div>
+<div id="content">
+  <div class="toc"><span class="toctitle">Table of Contents</span><ul>
+<li><a href="#_1">最大似然估计</a></li>
+<li><a href="#_2">最大后验估计</a></li>
+<li><a href="#_3">贝叶斯估计</a></li>
+<li><a href="#_4">参考</a></li>
+</ul>
+</div>
+<h2 id="_1">最大似然估计</h2>
+<p>找到参数$\theta$，使似然函数（观测数据$D$成立的可能性）最大，即<br />
+$$<br />
+\mathop{\arg\min}_{\theta} \ \ P(D|\theta)<br />
+$$<br />
+$P(x|\theta)$为似然函数。</p>
+<h2 id="_2">最大后验估计</h2>
+<p>找到参数$\theta$，使后验概率最大，后验概率可以用贝叶斯公式表示：<br />
+$$<br />
+P(\theta|D)=\frac{P(D|\theta)P(\theta)}{P(D)}<br />
+$$<br />
+$$<br />
+\mathop{\arg\min}_{\theta} \ \ \frac{P(D|\theta)P(\theta)}{P(D)}<br />
+$$<br />
+其中，分母$P(D)$与具体某一个$\theta$的选择无关，因为$P(D)=\int P(D,h)dh$，可以看做归一化常数，问题变成</p>
+<p>$$<br />
+\mathop{\arg\min}_{\theta} \ \ P(x|\theta)P(\theta)<br />
+$$<br />
+可以看出，MAP与MLE的区别在于MAP考虑了参数的先验概率$P(\theta)$</p>
+<h2 id="_3">贝叶斯估计</h2>
+<p>不考虑某一个最优的$\theta$，而是让所有的$\theta$都做预测，但最后通过一些加权平均的方式获得最终的结果。<br />
+$$<br />
+P(x|D)=\int P(x|\theta)P(\theta|D)d\theta<br />
+$$<br />
+其中，$x$为新的数据，$P(\theta|D)$可以看成是不同$\theta$的权重，$P(x|\theta)$是不同$\theta$的预测结果。贝叶斯估计做的事情就是得到不同$\theta$的权重。</p>
+<h2 id="_4">参考</h2>
+<p><a href="https://zhuanlan.zhihu.com/p/37215276">机器学习中的MLE、MAP、贝叶斯估计</a><br />
+<a href="http://www.anyv.net/index.php/article-2110343">什么是最大似然估计、最大后验估计以及贝叶斯参数估计</a></p>
+</div>
+<div id="content-footer">created in <span class="create-date date"> 2018-08-16 00:00 </span></div>
+<div id="comments"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script type="text/javascript">
+const gitment = new Gitment({
+  id: '<%= page.date %>',
+  title: '关于这个wiki',
+  owner: '2kkkkk',
+  repo: 'wiki',
+  oauth: {
+    client_id: '3e94faa97d38ef7da223',
+    client_secret: '20685c8a4da0dfad1c1ae91970b7805e260c5abb',
+  },
+  // ...
+  // For more available options, check out the documentation below
+})
+gitment.render('comments')
+// or
+// gitment.render(document.getElementById('comments'))
+// or
+// document.body.appendChild(gitment.render())
+</script>
+
+</div>
+<div id="footer">
+            <span>
+                Copyright © 2018 zhanghongwei.
+                Powered by <a href="http://simiki.org/" target="_blank">Simiki</a>.
+                Fork me in <a href="https://github.com/2kkkkk/wiki" target="_blank"> github </a>.
+            </span>
+</div>
+
+
+<!--百度统计-->
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?90e1dcdd1938573c19f9ff6521188e91";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+</body>
+</html>
