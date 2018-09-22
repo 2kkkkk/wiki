@@ -1,7 +1,8 @@
 ---
-title: "Simiki + Github Pages 在Mac下搭建部署个人wiki"
-layout: page
 date: 2018-06-27 00:00
+layout: page
+status: public
+title: 'Simiki + Github Pages 在Mac下搭建部署个人wiki'
 ---
 
 [TOC]
@@ -222,4 +223,4 @@ windows安装git：https://msysgit.github.com/
 
     git remote remove origin
     git remote add origin git@github.com:2kkkkk/wiki.git
-3.将写好的md文件放进`content`文件夹下，然后命令行进入到`wiki`文件夹：`cd wiki`，执行脚本：`deploy heiheihei`（如果是第一次部署的话，需要先执行`deploy -i`,再执行`deploy heiheihei` ）
+3.将写好的md文件放进`content`文件夹下，然后命令行进入到`wiki`文件夹：`cd wiki`，执行脚本：`deploy heiheihei`(mac执行 `./deploy.sh heiheihei`)（如果是第一次部署的话，需要先执行`deploy -i`(因为需要先将gh-pages分支克隆到本地),再执行`deploy heiheihei` ）
